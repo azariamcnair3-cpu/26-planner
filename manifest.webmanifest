@@ -1,12 +1,12 @@
 {
   "name": "Personal Planner",
   "short_name": "Planner",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f1ec",
-  "theme_color": "#f4f1ec",
-  "description": "A personal planner for school, professional, and personal life.",
+  "background_color": "#f2f1f6",
+  "theme_color": "#f2f1f6",
   "icons": [
     {
       "src": "icon-192.png",
