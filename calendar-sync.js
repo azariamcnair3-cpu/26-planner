@@ -154,9 +154,9 @@
      if (provider === 'google' && o.eventType === 'workingLocation') {
       if (ext) { 
         S.ev = S.ev.filter(e => e !== ext);
-  }
+    }
      continue;
-}
+  }
       const fields=mapper(o);if(!fields.date||fields.date==='NaN-NaN-NaN')continue;
       if(ext){if(ext.syncDirty){if(ext.syncEtag&&o.etag&&ext.syncEtag!==o.etag)ext.syncConflict=true;continue;}
         Object.assign(ext,fields,{p:c.category||'personal',syncEtag:o.etag||'',syncManaged:ext.syncManaged||false,syncConflict:false});updated++;
