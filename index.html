@@ -1099,8 +1099,10 @@ editorHTML=function(){
  if(!sheetList.some(function(p){return p.id===page.id}))sheetList.unshift(page);
  html=html.replace('<button data-ink="close">‹ Back</button>','<button data-ink="close">‹ Notes</button><span class="ink-sheet-folder">▤ '+h(inkFolderName(fid))+'</span>');
  html=html.replace('<option value="lined">Lined</option>','<option value="notebook">Notebook template</option><option value="lined">Lined</option>');
+ var folderOptions=inkFolders.concat([{id:inkUnfiledFolder,title:"Unfiled"}]);
+ var folderSelector='<label style="font-size:13px">Folder <select class="ink-sheet-select" id="ink-move-folder" aria-label="Move note to folder">'+folderOptions.map(function(f){return '<option value="'+h(f.id)+'"'+(fid===f.id?' selected':'')+'>'+h(f.title)+'</option>'}).join("")+'</select></label>';
  var opts=sheetList.slice(0,150).map(function(n){return '<option value="'+h(n.id)+'"'+(n.id===page.id?' selected':'')+'>'+h(inkDisplayTitle(n.title).slice(0,32))+'</option>'}).join("");
- html=html.replace('<div class="ink-toolbar"><button data-ink="undo">','<div class="ink-toolbar"><label style="font-size:13px">Pages <select class="ink-sheet-select" id="ink-switch-page" aria-label="Select notebook page">'+opts+'</select></label><button data-ink="undo">');
+ html=html.replace('<div class="ink-toolbar"><button data-ink="undo">','<div class="ink-toolbar"><label style="font-size:13px">Pages <select class="ink-sheet-select" id="ink-switch-page" aria-label="Select notebook page">'+opts+'</select></label>'+folderSelector+'<button data-ink="delete-sheet">Delete page</button><button data-ink="undo">');
  var tabs=sheetList.slice(0,9).map(function(n,i){return '<button type="button" data-ink="switch-sheet" data-id="'+h(n.id)+'" class="ink-page-tab'+(n.id===page.id?' active':'')+'" style="--tab-color:'+inkTabColors[i%inkTabColors.length]+'" title="'+h(inkDisplayTitle(n.title))+'">'+String(i+1).padStart(2,"0")+'</button>'}).join("");
  html=html.replace('<canvas id="ink-canvas" width="1000" height="1400" aria-label="Handwriting canvas"></canvas></div>','<canvas id="ink-canvas" width="1000" height="1400" aria-label="Handwriting canvas"></canvas><div class="ink-page-tabs" aria-label="Notebook page tabs">'+tabs+'</div></div>');
  html=html.replace('<div class="ink-tools-bottom">','<button type="button" class="ink-sheet-fab" data-ink="new-sheet" title="New page" aria-label="New notebook page">＋</button><div class="ink-tools-bottom">');
@@ -1139,6 +1141,7 @@ doAction=async function(el){
   var record={id:"folder-"+genId(),title:title,color:inkTabColors[inkFolders.length%inkTabColors.length],created:Date.now()};
   await inkPutFolder(record);await inkLoadFolders();inkActiveFolder=record.id;newNote(todayDate(),"","",record.id);return;
  }
+ if(action==="delete-sheet"){if(!page)return;if(!confirm("Delete this handwritten page?"))return;var oldID=page.id;await delPage(oldID);await refreshPages();document.getElementById("ink-overlay")?.remove();page=null;render();return}
  if(action==="rename-folder"){
   var f=inkFolders.find(function(x){return x.id===id});if(!f)return;
   var next=prompt("Rename folder:",f.title);if(next===null)return;next=next.trim().slice(0,50);if(!next)return;
@@ -1150,7 +1153,7 @@ doAction=async function(el){
  if(action==="open"){var open=pages.find(function(n){return n.id===id});if(open)inkActiveFolder=inkFolderID(open)}
  return inkOldDoAction(el);
 };
-document.addEventListener("change",function(e){if(e.target.id!=="ink-switch-page")return;var p=pages.find(function(n){return n.id===e.target.value});if(!p)return;
+document.addEventListener("change",function(e){if(e.target.id==="ink-move-folder"&&page){page.folderId=e.target.value;inkActiveFolder=page.folderId;(async function(){await saveInk();openEditor(page)})().catch(function(err){console.warn(err);toast("Could not move note")});return}if(e.target.id!=="ink-switch-page")return;var p=pages.find(function(n){return n.id===e.target.value});if(!p)return;
  (async function(){if(page)await saveInk();openEditor(p)})().catch(function(err){console.warn(err);toast("Could not open this page")});
 },true);
 document.addEventListener("input",function(e){if(page?.paper==="notebook"&&(e.target.id==="ink-title"||e.target.id==="ink-date"))draw()},true);
