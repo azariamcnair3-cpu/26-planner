@@ -233,6 +233,69 @@ input[type=color]{cursor:pointer}
 .ui-theme-select [data-key=warm-golden] .ui-theme-swatch{background:linear-gradient(125deg,#e1bd99,#b5a093)}
 @media(max-width:1100px){.ui-theme-select{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+/* Personal Planner · Apple Pencil workspace and custom iPad themes */
+:root[data-theme=modern-ios]{
+  --bg:#f2f2f7;--card:#fff;--tx:#1c1c1e;--mut:#6d6d79;--line:#e4e4ea;
+  --glass-border:rgba(210,211,221,.8);--sh:0 4px 18px rgba(38,41,58,.06);
+  --radius-app:18px;color-scheme:light;
+}
+:root[data-theme=modern-ios] body::before{background:linear-gradient(145deg,#f6f6fa,#ececf3)}
+:root[data-theme=modern-ios] .card,:root[data-theme=modern-ios] .ui-panel,
+:root[data-theme=modern-ios] .side,:root[data-theme=modern-ios] .ui-settings-card{
+  border:1px solid rgba(224,224,232,.8);box-shadow:0 3px 14px rgba(47,47,62,.045);
+}
+:root[data-theme=modern-ios] .nv.on{background:rgba(0,122,255,.10)!important;color:#0875da!important}
+:root[data-theme=color-kit]{--bg:#f6f3ec;--card:#fffcf8;--tx:#24252a;--mut:#686870;--line:#dcd7ce;--glass-border:#e9e3da;color-scheme:light}
+:root[data-theme=color-kit] body::before{background:var(--bg)}
+:root[data-theme=color-kit] .side{background:var(--kit-side,#ede9e2)}
+:root[data-theme=color-kit] .card,:root[data-theme=color-kit] .ui-panel,
+:root[data-theme=color-kit] .side,:root[data-theme=color-kit] .ui-settings-card{border-color:var(--line)}
+.ink-kit{margin:12px 0 18px;padding:16px;border:1px solid var(--line);border-radius:20px;background:var(--card)}
+.ink-kit h2{font-size:19px;margin:0 0 6px}
+.ink-kit p{font-size:13px;color:var(--mut);line-height:1.45}
+.ink-kit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ink-kit-grid label{font-size:12px;color:var(--mut);display:grid;gap:5px}
+.ink-kit-grid input[type=color]{width:100%;height:42px;min-width:0;border:1px solid var(--line);border-radius:10px;padding:3px;background:transparent}
+.ink-kit-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0 0}
+.ink-notebook{margin:0 0 16px;padding:20px}
+.ink-note-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:15px}
+.ink-note-tile{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px;display:grid;gap:7px;text-align:left;min-height:140px}
+.ink-note-tile strong{font-size:16px;overflow-wrap:anywhere}
+.ink-note-tile small{font-size:12px;color:var(--mut)}
+.ink-note-tile .ink-scribble{font-size:35px;font-family:Georgia,serif;line-height:1}
+.ink-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ink-cal-link{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0 16px}
+#ink-overlay{position:fixed;inset:0;z-index:1000;background:#e8e9ee;color:#1b1b20;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+#ink-overlay *{box-sizing:border-box}
+#ink-overlay button,#ink-overlay input,#ink-overlay select{font:inherit}
+.ink-header{display:flex;gap:10px;align-items:center;padding:10px max(12px,env(safe-area-inset-right)) 9px max(12px,env(safe-area-inset-left));background:#fafafd;border-bottom:1px solid #cfd0d8;flex-wrap:wrap}
+.ink-header button,.ink-toolbar button,.ink-tools-bottom button{border:1px solid #d7d7df;background:#fff;color:#262631;border-radius:11px;min-height:38px;padding:6px 12px}
+.ink-header .ink-title{font-size:18px;font-weight:650;flex:1;min-width:140px;max-width:360px;padding:8px;border:1px solid #dedee6;border-radius:10px}
+.ink-header input[type=date]{min-height:38px;max-width:165px;background:#fff;color:#24242c}
+.ink-status{font-size:12px;color:#606071;min-width:60px}
+.ink-toolbar,.ink-tools-bottom{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:8px 12px;background:#f7f7fa;border-bottom:1px solid #d8d8e0}
+.ink-toolbar button.on{color:#6549c1;background:#ede8fa;border-color:#ac9dd8}
+.ink-toolbar .ink-divider{width:1px;height:27px;background:#d4d4de;margin:0 3px}
+.ink-toolbar input[type=range]{width:105px;accent-color:#765dc7}
+.ink-swatches{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ink-swatch{width:29px;height:29px;min-height:29px!important;padding:0!important;border-radius:50%!important;border:2px solid #fff!important;box-shadow:0 0 0 1px #adb0ba}
+.ink-swatch.selected{box-shadow:0 0 0 3px #7864c2}
+.ink-toolbar input[type=color]{width:34px;height:32px;padding:1px;border:1px solid #bfc0cb;border-radius:10px;background:white}
+.ink-toolbar select{min-height:35px;padding:5px 8px;color:#222;background:white}
+.ink-scroll{flex:1;overflow:auto;overscroll-behavior:contain;padding:18px 8px 80px}
+.ink-page{width:min(100%,800px);margin:0 auto;box-shadow:0 10px 38px rgba(40,43,63,.20);background:#fff;border-radius:3px}
+.ink-page canvas{width:100%;height:auto;aspect-ratio:5/7;display:block;touch-action:none;cursor:crosshair}
+.ink-footnote{font-size:12px;color:#6c6d7e;text-align:center;padding:8px}
+.ink-tools-bottom{border-top:1px solid #d8d8e0;border-bottom:0;justify-content:space-between}
+.ink-calendar-note{font-size:13px;margin:0;padding:8px 10px;border:1px solid var(--line);background:var(--card);border-radius:999px;color:var(--tx)}
+@media(max-width:760px){
+ .ink-kit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ink-header{gap:6px}.ink-header .ink-title{flex-basis:50%;font-size:16px}
+ .ink-toolbar{max-height:184px;overflow-y:auto}.ink-scroll{padding:8px 3px 45px}
+ .ink-status{display:none}
+}
+
 </style></head><body>
 <nav class="side" id="side" aria-label="Sections"></nav>
 <main id="m"></main><div id="pr"></div><div id="ov"></div>
@@ -672,5 +735,285 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)weatherAutoStart();});
 })();
 
+</script>
+<script id="planner-pencil-feature">
+(function(){
+"use strict";
+if(window.PlannerInkReady)return;
+window.PlannerInkReady=true;
+var DB_NAME="personal-planner-pencil-v1", storeName="pages";
+var db=null, pages=[], page=null, tool="pen", inkColor="#2d2d32", penWidth=3.2;
+var penOnly=false, activePointer=null, activeStroke=null, past=[], future=[], saveTimer=0;
+var palette=["#29292c","#5e6066","#e55231","#e9a42b","#dc3174","#7651b0","#1963ad","#1fa0bc","#158b6b","#ffffff"];
+var defaultKit={bg:"#f6f3ec",card:"#fffcf8",text:"#24252a",muted:"#686870",line:"#dcd7ce",accent:"#7b68ad",sidebar:"#ede9e2"};
+if(!S.ui)S.ui={};
+S.ui.colorKit=Object.assign({},defaultKit,S.ui.colorKit||{});
+function h(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function todayDate(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function genId(){return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10)}
+function noteClone(x){return JSON.parse(JSON.stringify(x))}
+function openDatabase(){return new Promise(function(resolve,reject){
+ if(!window.indexedDB){reject(new Error("Handwriting storage is not available"));return}
+ var req=indexedDB.open(DB_NAME,1);
+ req.onupgradeneeded=function(){if(!req.result.objectStoreNames.contains(storeName))req.result.createObjectStore(storeName,{keyPath:"id"})};
+ req.onsuccess=function(){db=req.result;resolve(db)};
+ req.onerror=function(){reject(req.error||new Error("Cannot open note storage"))};
+ })}
+function getPages(){return new Promise(function(resolve,reject){
+ var req=db.transaction(storeName,"readonly").objectStore(storeName).getAll();
+ req.onsuccess=function(){resolve(req.result||[])};
+ req.onerror=function(){reject(req.error)};
+ })}
+function putPage(x){return new Promise(function(resolve,reject){
+ var tx=db.transaction(storeName,"readwrite");
+ tx.objectStore(storeName).put(noteClone(x));
+ tx.oncomplete=function(){resolve()};
+ tx.onerror=function(){reject(tx.error)};
+ })}
+function delPage(id){return new Promise(function(resolve,reject){
+ var tx=db.transaction(storeName,"readwrite");
+ tx.objectStore(storeName).delete(id);
+ tx.oncomplete=function(){resolve()};
+ tx.onerror=function(){reject(tx.error)};
+ })}
+function refreshPages(){return getPages().then(function(all){pages=all.sort(function(a,b){return (b.updated||0)-(a.updated||0)})})}
+function applyKit(){
+ var root=document.documentElement,keys=["--bg","--card","--tx","--mut","--line","--kit-side"],source=["bg","card","text","muted","line","sidebar"];
+ if(S.theme==="color-kit"){
+  for(var i=0;i<keys.length;i++)root.style.setProperty(keys[i],S.ui.colorKit[source[i]]);
+  root.style.setProperty("--app-accent",S.ui.colorKit.accent);
+ }else{
+  keys.forEach(function(k){root.style.removeProperty(k)});
+  if(S.theme==="modern-ios")root.style.setProperty("--app-accent","#0877d7");
+  else if(S.ui.accent)root.style.setProperty("--app-accent",S.ui.accent);
+ }
+}
+var originalRender=render;
+render=function(){originalRender();applyKit();decorate()};
+function decorationsForNotes(){
+ if(V!=="notes"||document.getElementById("ink-notebook"))return;
+ var host=document.querySelector("#m .card");if(!host)return;
+ var box=document.createElement("section");box.id="ink-notebook";box.className="card ink-notebook";
+ var tiles=pages.map(function(n){return '<div class="ink-note-tile"><span class="ink-scribble" aria-hidden="true">✎</span><strong>'+h(n.title||"Untitled page")+'</strong><small>'+h(n.date||"")+' · '+(n.strokes||[]).length+' strokes</small><div class="ink-actions"><button class="btn" data-ink="open" data-id="'+h(n.id)+'">Open</button><button class="btn" data-ink="delete" data-id="'+h(n.id)+'" aria-label="Delete note">Delete</button></div></div>'}).join("");
+ box.innerHTML='<div class="ui-panel-head"><div><h2 style="margin:0 0 6px">Handwritten pages</h2><div class="sub">Write with Apple Pencil. Attach a date and keep your pages.</div></div><button class="btn pri" data-ink="new">+ New page</button></div><div class="ink-actions"><button class="btn" data-ink="export">Export ink backup</button><label class="btn">Import ink backup<input type="file" id="ink-import" accept=".json,application/json" hidden></label></div><div class="ink-note-grid">'+(tiles||'<p class="sub">No handwritten pages yet. Start one with New page.</p>')+'</div>';
+ host.before(box);
+}
+function decorationsForCalendar(){
+ if(V!=="cal"||document.getElementById("ink-calendar-links"))return;
+ var host=document.querySelector("#m .ui-cal-header .card")||document.querySelector("#m .card");if(!host)return;
+ var box=document.createElement("div");box.id="ink-calendar-links";box.className="ink-cal-link";
+ var date=typeof C!=="undefined"&&M==="day"?ymd(C):todayDate();
+ var relevant=pages.filter(function(n){return n.date&&n.date.slice(0,7)===ymd(C).slice(0,7)});
+ box.innerHTML='<button class="btn" data-ink="new-calendar" data-date="'+h(date)+'">✎ New dated note</button><button class="btn" data-ink="goto-notes">Handwritten Notes ('+pages.length+')</button>'+relevant.slice(0,4).map(function(n){return '<button class="ink-calendar-note" data-ink="open" data-id="'+h(n.id)+'">'+h(n.date.slice(5))+' · '+h(n.title||"Ink note")+'</button>'}).join("");
+ host.insertBefore(box,host.firstChild);
+}
+function decorationsForSettings(){
+ if(V!=="set"||document.getElementById("ink-color-kit"))return;
+ var gallery=document.querySelector(".ui-theme-select");
+ if(gallery){
+  [["modern-ios","Modern iPad"],["color-kit","My Color Kit"]].forEach(function(pair){
+   if(gallery.querySelector('[data-key="'+pair[0]+'"]'))return;
+   var b=document.createElement("button");b.type="button";b.className=S.theme===pair[0]?"selected":"";b.dataset.uiAction="theme";b.dataset.key=pair[0];
+   b.setAttribute("aria-pressed",S.theme===pair[0]?"true":"false");
+   b.innerHTML='<span class="ui-theme-swatch" style="background:'+(pair[0]==="modern-ios"?"linear-gradient(110deg,#f9f9fd,#d9e8fb)":"linear-gradient(110deg,#f1e8dc,#c6b6d9)")+'"></span><span>'+pair[1]+'</span>';
+   gallery.appendChild(b);
+  });
+ }
+ var first=document.querySelector("#ui-settings .ui-settings-card");if(!first)return;
+ var box=document.createElement("div");box.id="ink-color-kit";box.className="ink-kit";
+ var fields=[["bg","Background"],["card","Panels"],["sidebar","Sidebar"],["text","Text"],["muted","Secondary text"],["line","Borders"],["accent","Accent"]];
+ box.innerHTML='<h2>My Color Kit</h2><p>Build your own palette. Each swatch is editable; switching to the kit applies your colors immediately.</p><div class="ink-kit-grid">'+fields.map(function(x){return '<label>'+x[1]+'<input type="color" data-ink-color="'+x[0]+'" value="'+h(S.ui.colorKit[x[0]])+'"></label>'}).join("")+'</div><div class="ink-kit-row"><button class="btn pri" data-ink="apply-kit">Use My Colors</button><button class="btn" data-ink="kit-reset">Reset palette</button></div>';
+ first.appendChild(box);
+}
+function decorate(){decorationsForNotes();decorationsForCalendar();decorationsForSettings()}
+function inkStatus(x){var e=document.getElementById("ink-status");if(e)e.textContent=x}
+function undoSnapshot(){past.push(JSON.stringify(page.strokes));if(past.length>35)past.shift();future=[]}
+function paperDraw(ctx,kind){
+ ctx.fillStyle="#fffefb";ctx.fillRect(0,0,1000,1400);
+ ctx.strokeStyle=kind==="grid"?"#e3e7ec":"#e1e4eb";ctx.lineWidth=1;
+ if(kind==="lined"||kind==="grid"){
+  for(var y=52;y<1400;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1000,y);ctx.stroke()}
+ }
+ if(kind==="grid"){for(var x=0;x<1000;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,1400);ctx.stroke()}}
+ if(kind==="dotted"){
+  ctx.fillStyle="#dce0e6";for(var dy=32;dy<1400;dy+=36)for(var dx=32;dx<1000;dx+=36){ctx.beginPath();ctx.arc(dx,dy,1.3,0,Math.PI*2);ctx.fill()}
+ }
+}
+function strokeDraw(ctx,s){
+ if(!s.points||!s.points.length)return;
+ ctx.save();ctx.lineJoin="round";ctx.lineCap="round";ctx.strokeStyle=s.color||"#24242a";
+ ctx.fillStyle=s.color||"#24242a";ctx.globalAlpha=s.tool==="highlighter"?.28:1;
+ var pts=s.points, width=Math.max(1,Number(s.width)||3);
+ if(pts.length===1){ctx.beginPath();ctx.arc(pts[0][0],pts[0][1],width/2,0,Math.PI*2);ctx.fill();ctx.restore();return}
+ for(var i=1;i<pts.length;i++){
+  var a=pts[i-1],b=pts[i],pressure=typeof b[2]==="number"?b[2]:.5;
+  ctx.lineWidth=width*(s.tool==="highlighter"?1:Math.max(.55,Math.min(1.35,.65+pressure*.85)));
+  ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();
+ }
+ ctx.restore();
+}
+function draw(){
+ var c=document.getElementById("ink-canvas");if(!c||!page)return;
+ var ctx=c.getContext("2d");if(!ctx)return;
+ paperDraw(ctx,page.paper||"lined");
+ (page.strokes||[]).forEach(function(s){strokeDraw(ctx,s)});
+ if(activeStroke)strokeDraw(ctx,activeStroke);
+}
+function point(e){
+ var r=document.getElementById("ink-canvas").getBoundingClientRect();
+ return [Math.max(0,Math.min(1000,(e.clientX-r.left)*1000/r.width)),
+ Math.max(0,Math.min(1400,(e.clientY-r.top)*1400/r.height)),
+ e.pointerType==="pen"&&e.pressure>0?e.pressure:.5];
+}
+function toSegment(p,a,b){var dx=b[0]-a[0],dy=b[1]-a[1],len=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((p[0]-a[0])*dx+(p[1]-a[1])*dy)/len));return Math.hypot(p[0]-a[0]-t*dx,p[1]-a[1]-t*dy)}
+function eraseNear(p){
+ var index=-1,best=16;
+ page.strokes.forEach(function(s,i){
+  var pts=s.points||[];
+  for(var j=1;j<pts.length;j++){var dist=toSegment(p,pts[j-1],pts[j]);if(dist<best){best=dist;index=i}}
+  if(pts.length===1&&Math.hypot(p[0]-pts[0][0],p[1]-pts[0][1])<best){best=10;index=i}
+ });
+ if(index>=0){page.strokes.splice(index,1);draw()}
+}
+function onPointerDown(e){
+ if(activePointer!==null||!page||e.button>0)return;
+ if(penOnly&&e.pointerType!=="pen")return;
+ e.preventDefault();var c=e.currentTarget;try{c.setPointerCapture(e.pointerId)}catch(_){}
+ activePointer=e.pointerId;undoSnapshot();
+ if(tool==="eraser"){activeStroke=null;eraseNear(point(e))}
+ else{activeStroke={tool:tool,color:inkColor,width:tool==="highlighter"?penWidth*6:penWidth,points:[point(e)]};draw()}
+}
+function onPointerMove(e){
+ if(activePointer!==e.pointerId)return;
+ e.preventDefault();var evs=typeof e.getCoalescedEvents==="function"?e.getCoalescedEvents():[];
+ if(!evs.length)evs=[e];
+ for(var i=0;i<evs.length;i++){if(tool==="eraser")eraseNear(point(evs[i]));else if(activeStroke)activeStroke.points.push(point(evs[i]))}
+ draw();
+}
+function onPointerUp(e){
+ if(activePointer!==e.pointerId)return;
+ e.preventDefault();
+ if(activeStroke){activeStroke.points.push(point(e));page.strokes.push(activeStroke)}
+ activeStroke=null;activePointer=null;draw();queueSave();
+}
+function queueSave(){
+ clearTimeout(saveTimer);saveTimer=setTimeout(function(){saveInk()},300);
+}
+async function saveInk(){
+ if(!page)return;
+ if(!db){inkStatus("Storage unavailable");return}
+ page.title=(document.getElementById("ink-title")||{}).value||page.title||"Untitled page";
+ page.date=(document.getElementById("ink-date")||{}).value||page.date||todayDate();
+ page.updated=Date.now();
+ inkStatus("Saving…");
+ try{await putPage(page);inkStatus("Saved");await refreshPages()}
+ catch(err){inkStatus("Save failed");console.warn("Ink save error",err)}
+}
+function editorHTML(){
+ return '<div id="ink-overlay" role="dialog" aria-modal="true" aria-label="Handwriting editor">'+
+ '<div class="ink-header"><button data-ink="close">‹ Back</button><input class="ink-title" id="ink-title" maxlength="90" aria-label="Note title" value="'+h(page.title)+'"><input type="date" id="ink-date" aria-label="Note date" value="'+h(page.date)+'"><span id="ink-status" class="ink-status">Ready</span><button data-ink="png">Save PNG</button><button data-ink="calendar-day">Calendar day</button></div>'+
+ '<div class="ink-toolbar" aria-label="Drawing tools"><button data-ink="tool" data-tool="pen" class="on">✎ Pen</button><button data-ink="tool" data-tool="highlighter">▰ Highlighter</button><button data-ink="tool" data-tool="eraser">⌫ Eraser</button><span class="ink-divider"></span>'+
+ '<label style="font-size:13px">Size <input id="ink-size" type="range" min="1" max="14" step=".5" value="'+penWidth+'"></label><span class="ink-divider"></span><div class="ink-swatches">'+palette.map(function(col){return '<button class="ink-swatch'+(inkColor===col?" selected":"")+'" data-ink="swatch" data-color="'+col+'" aria-label="Ink '+col+'" style="background:'+col+'"></button>'}).join("")+'</div><label title="Custom ink color">+ <input type="color" id="ink-custom-color" aria-label="Custom ink color" value="'+inkColor+'"></label></div>'+
+ '<div class="ink-toolbar"><button data-ink="undo">↶ Undo</button><button data-ink="redo">↷ Redo</button><label style="font-size:13px">Paper <select id="ink-paper"><option value="lined">Lined</option><option value="plain">Blank</option><option value="grid">Grid</option><option value="dotted">Dots</option></select></label><label style="font-size:13px;display:flex;align-items:center;gap:5px"><input type="checkbox" id="ink-pencil-only" '+(penOnly?"checked":"")+'> Apple Pencil only</label><span class="ink-status">Pencil pressure supported when available</span></div>'+
+ '<div class="ink-scroll"><div class="ink-page"><canvas id="ink-canvas" width="1000" height="1400" aria-label="Handwriting canvas"></canvas></div><div class="ink-footnote">Use Apple Pencil to write. Finger drawing is available when Pencil only is off.</div></div>'+
+ '<div class="ink-tools-bottom"><span>Handwritten pages are stored on this iPad. Export ink backups regularly.</span><button data-ink="close">Done</button></div></div>';
+}
+function openEditor(doc){
+ page=noteClone(doc);page.strokes=page.strokes||[];page.paper=page.paper||"lined";
+ past=[];future=[];tool="pen";activePointer=null;activeStroke=null;
+ document.getElementById("ink-overlay")?.remove();
+ var el=document.createElement("div");el.innerHTML=editorHTML();document.body.appendChild(el.firstChild);
+ document.getElementById("ink-paper").value=page.paper;
+ var c=document.getElementById("ink-canvas");
+ c.addEventListener("pointerdown",onPointerDown);
+ c.addEventListener("pointermove",onPointerMove);
+ c.addEventListener("pointerup",onPointerUp);
+ c.addEventListener("pointercancel",onPointerUp);
+ draw();document.getElementById("ink-title").focus();
+}
+function newNote(d,eventId,eventName){
+ var x={id:genId(),title:eventName?eventName+" notes":"Untitled page",date:d||todayDate(),eventId:eventId||"",paper:"lined",strokes:[],created:Date.now(),updated:Date.now()};
+ openEditor(x);queueSave();
+}
+async function closeEditor(){
+ clearTimeout(saveTimer);await saveInk();document.getElementById("ink-overlay")?.remove();page=null;render();
+}
+function download(text,type,name){
+ var blob=new Blob([text],{type:type}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},30000);
+}
+function savePNG(){
+ var c=document.getElementById("ink-canvas");if(!c)return;
+ c.toBlob(function(blob){if(!blob)return;var u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=((page.title||"handwritten-note").replace(/[^a-z0-9 -]/gi,"").slice(0,48)||"handwritten-note")+".png";a.click();setTimeout(function(){URL.revokeObjectURL(u)},30000)},"image/png");
+}
+async function exportNotes(){
+ try{await refreshPages();download(JSON.stringify({kind:"Personal Planner Ink Backup",version:1,date:new Date().toISOString(),pages:pages},null,2),"application/json","planner-handwriting-backup.json");toast("Ink backup exported")}
+ catch(err){toast("Could not export handwritten notes")}
+}
+async function importNotes(file){
+ if(!file||file.size>15*1024*1024){toast("Choose an ink backup under 15 MB");return}
+ try{var j=JSON.parse(await file.text());if(!j||j.kind!=="Personal Planner Ink Backup"||!Array.isArray(j.pages))throw new Error("Not an ink backup");
+  var count=0;for(var i=0;i<j.pages.length;i++){
+   var n=j.pages[i];if(!n||!Array.isArray(n.strokes)||n.strokes.length>20000)continue;
+   var clean={id:genId(),title:String(n.title||"Imported page").slice(0,90),date:/^\d{4}-\d{2}-\d{2}$/.test(n.date||"")?n.date:todayDate(),eventId:"",paper:["plain","lined","grid","dotted"].includes(n.paper)?n.paper:"lined",strokes:n.strokes,created:Date.now(),updated:Date.now()};
+   await putPage(clean);count++;
+  }
+  await refreshPages();render();toast("Imported "+count+" handwritten pages");
+ }catch(err){toast("Could not read ink backup")}
+}
+async function doAction(t){
+ var action=t.dataset.ink,id=t.dataset.id;
+ if(action==="new"){newNote(todayDate());return}
+ if(action==="new-calendar"){newNote(t.dataset.date||todayDate());return}
+ if(action==="new-event"){
+  var eventDate=document.getElementById("f-d")?.value||todayDate();
+  var eventTitle=document.getElementById("f-t")?.value||"Event";
+  var idInput=document.querySelector("#ov [data-a=saveev]");
+  newNote(eventDate,idInput?.dataset.id||"",eventTitle);return
+ }
+ if(action==="open"){var n=pages.find(function(p){return p.id===id});if(n)openEditor(n);return}
+ if(action==="delete"){if(!confirm("Delete this handwritten page?"))return;try{await delPage(id);await refreshPages();render()}catch(e){toast("Could not delete page")}return}
+ if(action==="close"){await closeEditor();return}
+ if(action==="goto-notes"){V="notes";render();return}
+ if(action==="calendar-day"){await closeEditor();V="cal";M="day";C=pd(page?.date||todayDate());render();return}
+ if(action==="tool"){tool=t.dataset.tool;document.querySelectorAll("#ink-overlay [data-ink=tool]").forEach(function(b){b.classList.toggle("on",b.dataset.tool===tool)});return}
+ if(action==="swatch"){inkColor=t.dataset.color;document.querySelectorAll("#ink-overlay .ink-swatch").forEach(function(b){b.classList.toggle("selected",b.dataset.color===inkColor)});document.getElementById("ink-custom-color").value=inkColor;return}
+ if(action==="undo"&&past.length){future.push(JSON.stringify(page.strokes));page.strokes=JSON.parse(past.pop());draw();queueSave();return}
+ if(action==="redo"&&future.length){past.push(JSON.stringify(page.strokes));page.strokes=JSON.parse(future.pop());draw();queueSave();return}
+ if(action==="png"){savePNG();return}
+ if(action==="export"){await exportNotes();return}
+ if(action==="apply-kit"){S.theme="color-kit";theme();save();render();return}
+ if(action==="kit-reset"){S.ui.colorKit=Object.assign({},defaultKit);S.theme="color-kit";theme();save();render();return}
+}
+document.addEventListener("click",function(e){
+ var t=e.target.closest("[data-ink]");if(!t)return;
+ e.preventDefault();e.stopPropagation();doAction(t).catch(function(err){console.warn("Ink action failed",err);toast("Could not complete action")});
+},true);
+document.addEventListener("input",function(e){
+ var t=e.target;
+ if(t.id==="ink-title"||t.id==="ink-date"){if(page)queueSave()}
+ else if(t.id==="ink-size"){penWidth=Number(t.value)}
+ else if(t.id==="ink-custom-color"){inkColor=t.value;document.querySelectorAll("#ink-overlay .ink-swatch").forEach(function(b){b.classList.remove("selected")})}
+},true);
+document.addEventListener("change",function(e){
+ var t=e.target;
+ if(t.id==="ink-pencil-only"){penOnly=t.checked}
+ else if(t.id==="ink-paper"&&page){page.paper=t.value;draw();queueSave()}
+ else if(t.id==="ink-import"&&t.files[0])importNotes(t.files[0]);
+ else if(t.dataset.inkColor){
+  S.ui.colorKit[t.dataset.inkColor]=t.value;S.theme="color-kit";theme();save();render()
+ }
+},true);
+function enhanceEventSheet(){
+ var ov=document.getElementById("ov");if(!ov||!ov.querySelector("#f-d")||ov.querySelector("[data-ink=new-event]"))return;
+ var b=document.createElement("button");b.type="button";b.className="btn";b.textContent="✎ Handwritten note";b.dataset.ink="new-event";b.style.margin="8px";ov.querySelector("#f-d").closest("label,div")?.appendChild(b);
+}
+if(window.MutationObserver){
+ var observer=new MutationObserver(function(){enhanceEventSheet()});observer.observe(document.getElementById("ov")||document.body,{childList:true,subtree:true});
+}
+openDatabase().then(function(){return refreshPages()}).then(function(){render()}).catch(function(err){
+ console.warn("Handwriting storage unavailable",err);
+ render();toast("Drawing storage unavailable on this device; check browser storage settings");
+});
+})();
 </script>
 </body></html>
