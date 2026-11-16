@@ -164,6 +164,75 @@ input[type=color]{cursor:pointer}
 .ui-weather-settings .btn{min-height:38px;font-size:12px}
 @media(max-width:450px){.ui-weather .ui-weather-temp{font-size:27px}}
 
+
+/* Four warm, personal themes. Color and surface changes only; the planner layout is unchanged. */
+:root[data-theme^="warm-"]{
+  color-scheme:light;
+  --radius-app:24px;
+}
+:root[data-theme=warm-rose]{
+  --bg:#dec9ce;--card:rgba(253,239,240,.57);--tx:#32252b;--mut:#6f5e68;
+  --line:rgba(116,83,97,.24);--glass-border:rgba(255,244,246,.68);
+  --sh:0 12px 32px rgba(100,65,75,.115),inset 0 1px 0 rgba(255,255,255,.48);
+  --warm-backdrop:radial-gradient(ellipse at 10% 8%,rgba(255,236,223,.64),transparent 50%),radial-gradient(ellipse at 84% 62%,rgba(204,157,169,.51),transparent 55%),linear-gradient(135deg,#dbcbd0 0%,#e5d2cf 53%,#c5b5bd 100%);
+}
+:root[data-theme=warm-peach]{
+  --bg:#e8cbb7;--card:rgba(255,240,226,.58);--tx:#382b26;--mut:#7a6357;
+  --line:rgba(147,98,71,.23);--glass-border:rgba(255,248,234,.72);
+  --sh:0 12px 32px rgba(131,84,52,.12),inset 0 1px 0 rgba(255,255,255,.52);
+  --warm-backdrop:radial-gradient(ellipse at 86% 20%,rgba(255,220,171,.78),transparent 54%),radial-gradient(ellipse at 9% 93%,rgba(204,162,151,.38),transparent 46%),linear-gradient(136deg,#f2d9c9 0%,#e7c6b1 57%,#d8ad96 100%);
+}
+:root[data-theme=warm-linen]{
+  --bg:#d2c7bd;--card:rgba(246,239,229,.57);--tx:#332e2a;--mut:#6c625b;
+  --line:rgba(111,99,87,.24);--glass-border:rgba(255,252,244,.62);
+  --sh:0 11px 29px rgba(80,70,61,.13),inset 0 1px 0 rgba(255,255,255,.45);
+  --warm-backdrop:radial-gradient(ellipse at 6% 4%,rgba(241,227,211,.72),transparent 46%),radial-gradient(ellipse at 76% 94%,rgba(164,151,139,.34),transparent 53%),linear-gradient(140deg,#d6c9bb 0%,#dfd3c5 45%,#c2b6ab 100%);
+}
+:root[data-theme=warm-golden]{
+  --bg:#c9b9ac;--card:rgba(240,227,213,.56);--tx:#302823;--mut:#66574d;
+  --line:rgba(101,76,60,.27);--glass-border:rgba(255,239,222,.60);
+  --sh:0 14px 35px rgba(86,60,45,.17),inset 0 1px 0 rgba(255,249,237,.40);
+  --warm-backdrop:radial-gradient(ellipse at 86% 15%,rgba(237,194,145,.62),transparent 51%),radial-gradient(ellipse at 2% 90%,rgba(152,139,135,.36),transparent 48%),linear-gradient(135deg,#cdbbb0 0%,#d0b6a4 52%,#b5a49b 100%);
+}
+:root[data-theme^="warm-"] body::before{background:var(--warm-backdrop)}
+:root[data-theme^="warm-"] body.ui-has-wallpaper::before{
+  background-image:linear-gradient(rgba(220,194,174,.17),rgba(177,142,130,.21)),var(--user-wallpaper);
+  background-size:cover;background-position:center;
+}
+:root[data-theme^="warm-"] .side,
+:root[data-theme^="warm-"] .card,
+:root[data-theme^="warm-"] .ui-panel,
+:root[data-theme^="warm-"] .ui-settings-card,
+:root[data-theme^="warm-"] .ui-glass-panel,
+:root[data-theme^="warm-"] .sheet{
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(18px) saturate(118%);
+  -webkit-backdrop-filter:blur(18px) saturate(118%);
+  box-shadow:var(--sh);
+}
+:root[data-theme^="warm-"] .btn,
+:root[data-theme^="warm-"] .chip,
+:root[data-theme^="warm-"] .seg,
+:root[data-theme^="warm-"] .ui-float{
+  background:color-mix(in srgb,var(--card) 80%,transparent);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+:root[data-theme^="warm-"] .seg button.on{background:color-mix(in srgb,var(--card) 84%,#fff 16%)}
+/* The in-app theme gallery: small previews, not decorative dashboard widgets. */
+.ui-theme-select{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ui-theme-select button{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:7px;padding:8px 9px;min-width:0;min-height:85px;white-space:normal;font-size:12px;text-align:center}
+.ui-theme-swatch{display:block;flex:none;width:100%;height:38px;border-radius:11px;border:1px solid rgba(80,70,80,.12);box-shadow:inset 0 1px rgba(255,255,255,.48)}
+.ui-theme-select [data-key=light] .ui-theme-swatch{background:linear-gradient(125deg,#f7f7fb,#e9edf3)}
+.ui-theme-select [data-key=dark] .ui-theme-swatch{background:linear-gradient(125deg,#16171c,#34303d)}
+.ui-theme-select [data-key=glass] .ui-theme-swatch{background:linear-gradient(125deg,#aebcda,#d5c9de)}
+.ui-theme-select [data-key=warm-rose] .ui-theme-swatch{background:linear-gradient(125deg,#f1d6d2,#d4b9c7)}
+.ui-theme-select [data-key=warm-peach] .ui-theme-swatch{background:linear-gradient(125deg,#f6ddc6,#e0ad97)}
+.ui-theme-select [data-key=warm-linen] .ui-theme-swatch{background:linear-gradient(125deg,#e6dbca,#bfb4ab)}
+.ui-theme-select [data-key=warm-golden] .ui-theme-swatch{background:linear-gradient(125deg,#e1bd99,#b5a093)}
+@media(max-width:1100px){.ui-theme-select{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style></head><body>
 <nav class="side" id="side" aria-label="Sections"></nav>
 <main id="m"></main><div id="pr"></div><div id="ov"></div>
@@ -395,9 +464,11 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
   let taskView='all';
   let longPressTimer=0,longPressTriggered=false;
   const allowedFonts={system:"-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",rounded:"ui-rounded,-apple-system,'Arial Rounded MT Bold',sans-serif",avenir:"'Avenir Next',Avenir,-apple-system,sans-serif",serif:"Georgia,'New York',serif",mono:"ui-monospace,'SF Mono',Menlo,monospace"};
+  const THEME_ACCENTS={'warm-rose':'#986a7e','warm-peach':'#a96f4d','warm-linen':'#827167','warm-golden':'#a77147'};
   const setVars=()=>{
     const root=document.documentElement;
-    root.style.setProperty('--app-accent',/^#[0-9a-f]{6}$/i.test(ui.accent)?ui.accent:'#7956c6');
+    const userAccent=(ui.accentCustom===true)||(!ui.accentCustom&&!['#7956c6','#7855c7'].includes(String(ui.accent||'').toLowerCase()));
+    root.style.setProperty('--app-accent',userAccent&&/^#[0-9a-f]{6}$/i.test(ui.accent)?ui.accent:(THEME_ACCENTS[S.theme]||'#7956c6'));
     root.style.setProperty('--user-font',allowedFonts[ui.font]||allowedFonts.system);
     root.style.setProperty('--user-scale',String(Math.max(85,Math.min(120,Number(ui.fontSize)||100))/100));
     if(ui.wallpaper){document.body.style.setProperty('--user-wallpaper',`url("${ui.wallpaper}")`);document.body.classList.add('ui-has-wallpaper')}
@@ -452,16 +523,16 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
   }
   // Customize/settings UI injected into existing Settings, which already includes the working calendar bridge.
   function customizationPanel(){const opts=(selected,values)=>values.map(([key,label])=>`<option value="${key}" ${selected===key?'selected':''}>${label}</option>`).join('');
-    const themes=[['light','☀ Light'],['dark','☾ Dark'],['glass','◈ Glass']];
+    const themes=[['light','Light'],['dark','Dark'],['glass','Glass'],['warm-rose','Rose Studio'],['warm-peach','Peach Morning'],['warm-linen','Soft Linen'],['warm-golden','Golden Hour']];
     const widgetRows=Object.keys(WN).map(k=>`<label><input type="checkbox" data-ui-visible="${k}" ${ui.hiddenWidgets.includes(k)?'':'checked'}><span>${safe(WN[k])}</span></label>`).join('');
     const labelRows=Object.keys(WN).filter(k=>k!=='clock'&&k!=='photo').map(k=>`<div class="ui-settings-line"><label>${safe(WN[k])} title</label><input type="text" data-ui-label-input="${k}" value="${safe(wlabel(k))}" style="max-width:180px"><input type="color" data-ui-label-color="${k}" value="${ui.labelColors[k]||ui.accent}" title="Title color" style="width:44px;height:38px;padding:0;border:0;background:transparent"><label style="display:flex;align-items:center;gap:5px;flex:0;width:auto;white-space:nowrap;font-size:12px"><input type="checkbox" data-ui-hide-label="${k}" ${ui.hiddenLabels.includes(k)?'checked':''}>Hide</label></div>`).join('');
-    return `<div class="ui-settings-grid" id="ui-settings"><section class="ui-settings-card"><h2>Appearance</h2><div class="ui-theme-select">${themes.map(([k,label])=>`<button type="button" class="${S.theme===k?'selected':''}" data-ui-action="theme" data-key="${k}">${label}</button>`).join('')}</div><p class="sub">Choose Light, Dark, or transparent Glass. Changes save instantly.</p><div class="ui-settings-line"><label>Accent color</label><input type="color" id="ui-accent" value="${safe(ui.accent)}"></div><div class="ui-settings-line"><label>Font</label><select id="ui-font">${opts(ui.font,[['system','Apple system'],['rounded','Rounded'],['avenir','Avenir Next'],['serif','Serif'],['mono','Monospaced']])}</select></div><div class="ui-settings-line"><label>Font size <span id="ui-size-value">${ui.fontSize}%</span></label><input type="range" min="85" max="120" step="5" id="ui-fontsize" value="${ui.fontSize}"></div><div class="ui-settings-line"><label>Planner icon</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Upload image<input id="ui-icon-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-icon" style="min-height:36px;font-size:12px">Reset</button></div></div><div class="ui-settings-line"><label>Background photo</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Choose photo<input id="ui-wallpaper-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-wallpaper" style="min-height:36px;font-size:12px">Clear</button></div></div></section><section class="ui-settings-card"><h2>Customize Home</h2><p class="sub">Choose which widgets appear on Home, and rearrange them with the Customize Home button on the Home tab.</p><div class="ui-widget-settings">${widgetRows}</div><div class="ui-settings-line"><label>Reset Home layout</label><button class="btn" data-ui-action="reset-home" style="min-height:36px;font-size:12px">Restore arrangement</button></div><div class="ui-weather-settings"><h2>Automatic weather</h2><p class="sub">Weather refreshes while your planner is open. Allow location once, or choose a city; you won't have to enter the temperature yourself.</p><div class="ui-weather-actions"><button class="btn" data-ui-action="weather-location" type="button">Use my location</button><input id="ui-weather-city" type="text" aria-label="Weather city" placeholder="City, e.g. Charlotte" value="${safe(ui.weather.city||'')}"><button class="btn" data-ui-action="weather-city" type="button">Use city</button><button class="btn" data-ui-action="weather-refresh" type="button">Refresh</button></div><p class="sub" id="ui-weather-status" style="margin-top:8px">${safe(ui.weather.status||'Location access is optional.')}</p></div><h2 style="margin-top:18px">Edit or hide widget titles</h2><p class="sub">You can also press and hold a Home heading to rename or hide it.</p>${labelRows}</section></div>`;
+    return `<div class="ui-settings-grid" id="ui-settings"><section class="ui-settings-card"><h2>Appearance</h2><div class="ui-theme-select">${themes.map(([k,label])=>`<button type="button" class="${S.theme===k?'selected':''}" data-ui-action="theme" data-key="${k}" aria-pressed="${S.theme===k}"><span class="ui-theme-swatch" aria-hidden="true"></span><span>${label}</span></button>`).join('')}</div><p class="sub">Choose any of the seven looks. Your photos and layout stay as you left them; changes save instantly.</p><div class="ui-settings-line"><label>Accent color</label><input type="color" id="ui-accent" value="${safe((ui.accentCustom||!["#7956c6","#7855c7"].includes(String(ui.accent||"").toLowerCase()))?ui.accent:(THEME_ACCENTS[S.theme]||ui.accent))}"></div><div class="ui-settings-line"><label>Font</label><select id="ui-font">${opts(ui.font,[['system','Apple system'],['rounded','Rounded'],['avenir','Avenir Next'],['serif','Serif'],['mono','Monospaced']])}</select></div><div class="ui-settings-line"><label>Font size <span id="ui-size-value">${ui.fontSize}%</span></label><input type="range" min="85" max="120" step="5" id="ui-fontsize" value="${ui.fontSize}"></div><div class="ui-settings-line"><label>Planner icon</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Upload image<input id="ui-icon-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-icon" style="min-height:36px;font-size:12px">Reset</button></div></div><div class="ui-settings-line"><label>Background photo</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Choose photo<input id="ui-wallpaper-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-wallpaper" style="min-height:36px;font-size:12px">Clear</button></div></div></section><section class="ui-settings-card"><h2>Customize Home</h2><p class="sub">Choose which widgets appear on Home, and rearrange them with the Customize Home button on the Home tab.</p><div class="ui-widget-settings">${widgetRows}</div><div class="ui-settings-line"><label>Reset Home layout</label><button class="btn" data-ui-action="reset-home" style="min-height:36px;font-size:12px">Restore arrangement</button></div><div class="ui-weather-settings"><h2>Automatic weather</h2><p class="sub">Weather refreshes while your planner is open. Allow location once, or choose a city; you won't have to enter the temperature yourself.</p><div class="ui-weather-actions"><button class="btn" data-ui-action="weather-location" type="button">Use my location</button><input id="ui-weather-city" type="text" aria-label="Weather city" placeholder="City, e.g. Charlotte" value="${safe(ui.weather.city||'')}"><button class="btn" data-ui-action="weather-city" type="button">Use city</button><button class="btn" data-ui-action="weather-refresh" type="button">Refresh</button></div><p class="sub" id="ui-weather-status" style="margin-top:8px">${safe(ui.weather.status||'Location access is optional.')}</p></div><h2 style="margin-top:18px">Edit or hide widget titles</h2><p class="sub">You can also press and hold a Home heading to rename or hide it.</p>${labelRows}</section></div>`;
   }
   const oldHome=home,oldTasks=tasks,oldSection=section,oldSettings=sets,oldCal=cal,oldRender=render;
   home=modernHome;tasks=modernTasks;section=modernSection;
   cal=function(){return `<div class="ui-cal-header">${oldCal()}</div>`;};
   sets=function(){let h=oldSettings();
-    // Replace the original small theme dropdown with a true 3-choice Appearance control.
+    // Replace the old small dropdown with the theme gallery; leave calendar connection settings intact.
     h=h.replace(/<label class="sub">Planner appearance<select id="theme">[\s\S]*?<\/select><\/label>/,'');
     h=h.replace('<h1>Settings</h1></div>','<h1>Settings</h1></div>'+customizationPanel());
     return h;
@@ -578,7 +649,7 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
     else if(t.dataset.uiHideLabel){ui.hiddenLabels=ui.hiddenLabels.filter(x=>x!==t.dataset.uiHideLabel);if(t.checked)ui.hiddenLabels.push(t.dataset.uiHideLabel);save();render();}
     else if(t.dataset.uiLabelColor){ui.labelColors[t.dataset.uiLabelColor]=t.value;save();render()}
     else if(t.id==='ui-font'){ui.font=t.value;save();render()}
-    else if(t.id==='ui-accent'){ui.accent=t.value;save();render()}
+    else if(t.id==='ui-accent'){ui.accent=t.value;ui.accentCustom=true;save();render()}
     else if(t.id==='ui-fontsize'){ui.fontSize=Number(t.value);save();render()}
     else if(t.id==='ui-icon-file'&&t.files?.[0])compress(t.files[0],220,.85,s=>{ui.iconPhoto=s;save();render()})
     else if(t.id==='ui-wallpaper-file'&&t.files?.[0])compress(t.files[0],1500,.73,s=>{ui.wallpaper=s;save();render()})
