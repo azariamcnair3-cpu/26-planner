@@ -974,7 +974,7 @@ async function doAction(t){
  if(action==="delete"){if(!confirm("Delete this handwritten page?"))return;try{await delPage(id);await refreshPages();render()}catch(e){toast("Could not delete page")}return}
  if(action==="close"){await closeEditor();return}
  if(action==="goto-notes"){V="notes";render();return}
- if(action==="calendar-day"){await closeEditor();V="cal";M="day";C=pd(page?.date||todayDate());render();return}
+ if(action==="calendar-day"){var noteDate=page&&page.date?page.date:todayDate();await closeEditor();V="cal";M="day";C=pd(noteDate);render();return}
  if(action==="tool"){tool=t.dataset.tool;document.querySelectorAll("#ink-overlay [data-ink=tool]").forEach(function(b){b.classList.toggle("on",b.dataset.tool===tool)});return}
  if(action==="swatch"){inkColor=t.dataset.color;document.querySelectorAll("#ink-overlay .ink-swatch").forEach(function(b){b.classList.toggle("selected",b.dataset.color===inkColor)});document.getElementById("ink-custom-color").value=inkColor;return}
  if(action==="undo"&&past.length){future.push(JSON.stringify(page.strokes));page.strokes=JSON.parse(past.pop());draw();queueSave();return}
