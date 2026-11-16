@@ -147,6 +147,23 @@ input[type=color]{cursor:pointer}
 @media(max-width:820px){.side{left:10px;top:10px;bottom:10px;z-index:35}main{width:100%;margin:0;padding:10px}.ui-home-grid,.ui-page-grid,.ui-settings-grid{grid-template-columns:1fr}.ui-home-head{padding-top:3px}.ui-home-column{gap:12px}.ui-task-form{grid-template-columns:1fr 1fr}.ui-photo .ph{height:275px}}
 @media(max-width:450px){.ui-task-form{grid-template-columns:1fr}.ui-clock .clk{font-size:50px}.ui-weather .ui-wtemp input{font-size:29px!important;width:85px!important}.ui-task-item .ui-category-tag{display:none}}
 
+/* Quiet Home by default: editing controls only appear inside Customize Home. */
+.ui-photo-tools{display:none!important}
+.ui-home-editing .ui-photo-tools{display:flex!important}
+/* Live weather uses the exact previous clock layout, no inline edit fields or highlight. */
+.ui-weather .ui-weather-temp{font-size:36px;line-height:1.15;font-weight:330;letter-spacing:-.04em;white-space:nowrap}
+.ui-weather .ui-weather-condition{display:block;max-width:150px;color:var(--mut);font-size:13px;line-height:1.4;text-align:right}
+.ui-weather .ui-weather-icon{font-size:25px;line-height:1;display:inline-block}
+.ui-weather .ui-wtemp{align-items:center}
+.ui-weather .ui-weather-location{display:block;font-size:11px;color:var(--mut);text-align:right;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:3px}
+.ui-home-editing .ui-clock{flex-wrap:wrap}
+.ui-home-editing .ui-clock>.ui-widget-handle{flex:0 0 100%}
+.ui-weather-settings{padding-top:13px;margin-top:15px;border-top:1px solid var(--line)}
+.ui-weather-settings .ui-weather-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ui-weather-settings input[type=text]{max-width:205px;flex:1 1 130px;min-height:38px;padding:8px}
+.ui-weather-settings .btn{min-height:38px;font-size:12px}
+@media(max-width:450px){.ui-weather .ui-weather-temp{font-size:27px}}
+
 </style></head><body>
 <nav class="side" id="side" aria-label="Sections"></nav>
 <main id="m"></main><div id="pr"></div><div id="ov"></div>
@@ -367,6 +384,8 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
   ui.wallpaper ||= '';
   ui.homeShowNote ||= false;
   ui.homeEdit ||= false;
+  ui.weather ||= {mode:'auto',city:'',lat:null,lon:null,temperature:'',condition:'',icon:'',lastSync:0,locAt:0,unit:'fahrenheit'};
+  ui.weather.unit ||= 'fahrenheit';
   if(!ui.design2026){
     ui.design2026 = true;
     // The requested new look begins in Glass, without altering existing tasks or connections.
@@ -400,7 +419,7 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
     const photo=S.photo?`<img src="${S.photo}" alt="Your chosen Home photo">`:`<span class="sub">Your photo will go here. Tap Choose photo below.</span>`;
     return `<section class="ui-panel ui-photo" data-widget="photo"><div class="ph">${photo}${S.photoDate?`<small>${safe(S.photoDate)}</small>`:''}</div><div class="ui-photo-tools"><span class="sub">Your photo</span><label class="btn">${S.photo?'Change photo':'Choose photo'}<input id="pf" type="file" accept="image/*" hidden></label></div>${widgetControls('photo')}</section>`;
   }
-  function timeWidget(){const now=new Date();return `<section class="ui-panel ui-clock" data-widget="clock"><div><div class="ui-day">${fmtDay(now)}</div><div class="ui-date">${MN[now.getMonth()]} ${now.getDate()}</div><div class="clk" id="clk">${(now.getHours()%12)||12}:${pad(now.getMinutes())} <span style="font-size:20px;color:var(--mut)">${now.getHours()<12?'AM':'PM'}</span></div></div><div class="ui-weather"><div class="ui-wtemp"><span aria-hidden="true" style="font-size:26px">☀️</span><input id="wt" type="text" value="${safe(S.wx.t||'')}" placeholder="--°" aria-label="Temperature" maxlength="10"></div><input id="wc" type="text" value="${safe(S.wx.city||'')}" placeholder="Add weather note" aria-label="Weather description"></div>${widgetControls('clock')}</section>`;}
+  function timeWidget(){const now=new Date(),w=ui.weather;return `<section class="ui-panel ui-clock" data-widget="clock"><div><div class="ui-day">${fmtDay(now)}</div><div class="ui-date">${MN[now.getMonth()]} ${now.getDate()}</div><div class="clk" id="clk">${(now.getHours()%12)||12}:${pad(now.getMinutes())} <span style="font-size:20px;color:var(--mut)">${now.getHours()<12?'AM':'PM'}</span></div></div><div class="ui-weather" aria-live="polite"><div class="ui-wtemp"><span class="ui-weather-icon" id="ui-weather-icon" aria-hidden="true">${w.icon||'☀️'}</span><span class="ui-weather-temp" id="ui-weather-temp">${safe(w.temperature||'--°')}</span></div><span class="ui-weather-condition" id="ui-weather-condition">${safe(w.condition||'Weather loading…')}</span><span class="ui-weather-location" id="ui-weather-location">${safe(w.city||'')}</span></div>${widgetControls('clock')}</section>`;}
   function upcomingWidget(){const dates=listUpcoming(null,21,12);const out=dates.length?dates.map(({day,items})=>{
     const h=`<div class="grp ${ymd(day)===ymd(new Date())?'t':''}">${fmtDay(day).toUpperCase()} <span style="font-weight:500">${MN[day.getMonth()].slice(0,3)} ${day.getDate()}</span></div>`;
     return h+items.map(e=>`<button class="up" data-a="edit" data-id="${safe(e.id)}" style="--c:${pp(e.p).c}"><i></i><div><b>${safe(e.t)}</b><span>${e.ad?'All-day':f12(e.st)+(e.en?' – '+f12(e.en):'')}${e.n?' · '+safe(e.n):''}</span></div></button>`).join('');
@@ -436,7 +455,7 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
     const themes=[['light','☀ Light'],['dark','☾ Dark'],['glass','◈ Glass']];
     const widgetRows=Object.keys(WN).map(k=>`<label><input type="checkbox" data-ui-visible="${k}" ${ui.hiddenWidgets.includes(k)?'':'checked'}><span>${safe(WN[k])}</span></label>`).join('');
     const labelRows=Object.keys(WN).filter(k=>k!=='clock'&&k!=='photo').map(k=>`<div class="ui-settings-line"><label>${safe(WN[k])} title</label><input type="text" data-ui-label-input="${k}" value="${safe(wlabel(k))}" style="max-width:180px"><input type="color" data-ui-label-color="${k}" value="${ui.labelColors[k]||ui.accent}" title="Title color" style="width:44px;height:38px;padding:0;border:0;background:transparent"><label style="display:flex;align-items:center;gap:5px;flex:0;width:auto;white-space:nowrap;font-size:12px"><input type="checkbox" data-ui-hide-label="${k}" ${ui.hiddenLabels.includes(k)?'checked':''}>Hide</label></div>`).join('');
-    return `<div class="ui-settings-grid" id="ui-settings"><section class="ui-settings-card"><h2>Appearance</h2><div class="ui-theme-select">${themes.map(([k,label])=>`<button type="button" class="${S.theme===k?'selected':''}" data-ui-action="theme" data-key="${k}">${label}</button>`).join('')}</div><p class="sub">Choose Light, Dark, or transparent Glass. Changes save instantly.</p><div class="ui-settings-line"><label>Accent color</label><input type="color" id="ui-accent" value="${safe(ui.accent)}"></div><div class="ui-settings-line"><label>Font</label><select id="ui-font">${opts(ui.font,[['system','Apple system'],['rounded','Rounded'],['avenir','Avenir Next'],['serif','Serif'],['mono','Monospaced']])}</select></div><div class="ui-settings-line"><label>Font size <span id="ui-size-value">${ui.fontSize}%</span></label><input type="range" min="85" max="120" step="5" id="ui-fontsize" value="${ui.fontSize}"></div><div class="ui-settings-line"><label>Planner icon</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Upload image<input id="ui-icon-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-icon" style="min-height:36px;font-size:12px">Reset</button></div></div><div class="ui-settings-line"><label>Background photo</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Choose photo<input id="ui-wallpaper-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-wallpaper" style="min-height:36px;font-size:12px">Clear</button></div></div></section><section class="ui-settings-card"><h2>Customize Home</h2><p class="sub">Choose which widgets appear on Home, and rearrange them with the Customize Home button on the Home tab.</p><div class="ui-widget-settings">${widgetRows}</div><div class="ui-settings-line"><label>Reset Home layout</label><button class="btn" data-ui-action="reset-home" style="min-height:36px;font-size:12px">Restore arrangement</button></div><h2 style="margin-top:18px">Edit or hide widget titles</h2><p class="sub">You can also press and hold a Home heading to rename or hide it.</p>${labelRows}</section></div>`;
+    return `<div class="ui-settings-grid" id="ui-settings"><section class="ui-settings-card"><h2>Appearance</h2><div class="ui-theme-select">${themes.map(([k,label])=>`<button type="button" class="${S.theme===k?'selected':''}" data-ui-action="theme" data-key="${k}">${label}</button>`).join('')}</div><p class="sub">Choose Light, Dark, or transparent Glass. Changes save instantly.</p><div class="ui-settings-line"><label>Accent color</label><input type="color" id="ui-accent" value="${safe(ui.accent)}"></div><div class="ui-settings-line"><label>Font</label><select id="ui-font">${opts(ui.font,[['system','Apple system'],['rounded','Rounded'],['avenir','Avenir Next'],['serif','Serif'],['mono','Monospaced']])}</select></div><div class="ui-settings-line"><label>Font size <span id="ui-size-value">${ui.fontSize}%</span></label><input type="range" min="85" max="120" step="5" id="ui-fontsize" value="${ui.fontSize}"></div><div class="ui-settings-line"><label>Planner icon</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Upload image<input id="ui-icon-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-icon" style="min-height:36px;font-size:12px">Reset</button></div></div><div class="ui-settings-line"><label>Background photo</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Choose photo<input id="ui-wallpaper-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-wallpaper" style="min-height:36px;font-size:12px">Clear</button></div></div></section><section class="ui-settings-card"><h2>Customize Home</h2><p class="sub">Choose which widgets appear on Home, and rearrange them with the Customize Home button on the Home tab.</p><div class="ui-widget-settings">${widgetRows}</div><div class="ui-settings-line"><label>Reset Home layout</label><button class="btn" data-ui-action="reset-home" style="min-height:36px;font-size:12px">Restore arrangement</button></div><div class="ui-weather-settings"><h2>Automatic weather</h2><p class="sub">Weather refreshes while your planner is open. Allow location once, or choose a city; you won't have to enter the temperature yourself.</p><div class="ui-weather-actions"><button class="btn" data-ui-action="weather-location" type="button">Use my location</button><input id="ui-weather-city" type="text" aria-label="Weather city" placeholder="City, e.g. Charlotte" value="${safe(ui.weather.city||'')}"><button class="btn" data-ui-action="weather-city" type="button">Use city</button><button class="btn" data-ui-action="weather-refresh" type="button">Refresh</button></div><p class="sub" id="ui-weather-status" style="margin-top:8px">${safe(ui.weather.status||'Location access is optional.')}</p></div><h2 style="margin-top:18px">Edit or hide widget titles</h2><p class="sub">You can also press and hold a Home heading to rename or hide it.</p>${labelRows}</section></div>`;
   }
   const oldHome=home,oldTasks=tasks,oldSection=section,oldSettings=sets,oldCal=cal,oldRender=render;
   home=modernHome;tasks=modernTasks;section=modernSection;
@@ -463,6 +482,76 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
     if(dir==='side'){arr.splice(idx,1);ui.widgetColumns[other].push(key)}else{const next=dir==='up'?idx-1:idx+1;if(next>=0&&next<arr.length){[arr[idx],arr[next]]=[arr[next],arr[idx]];}}
     save();render();
   }
+  // Live weather: free non-commercial Open-Meteo API, no key and no worker changes.
+  // Only coordinates and the latest reading are kept in this device's planner storage.
+  const weatherCode=(code,isDay)=>{
+    const c=Number(code);
+    if(c===0)return {text:'Clear',icon:isDay?'☀️':'🌙'};
+    if(c<=3)return {text:c===1?'Mostly clear':c===2?'Partly cloudy':'Cloudy',icon:isDay?'⛅':'☁️'};
+    if(c===45||c===48)return {text:'Fog',icon:'🌫️'};
+    if(c>=51&&c<=57)return {text:'Drizzle',icon:'🌦️'};
+    if(c>=61&&c<=67)return {text:'Rain',icon:'🌧️'};
+    if(c>=71&&c<=77)return {text:'Snow',icon:'❄️'};
+    if(c>=80&&c<=82)return {text:'Rain showers',icon:'🌦️'};
+    if(c>=85&&c<=86)return {text:'Snow showers',icon:'🌨️'};
+    if(c>=95)return {text:'Thunderstorms',icon:'⛈️'};
+    return {text:'Current weather',icon:'☁️'};
+  };
+  let weatherBusy=false,weatherGeoBusy=false;
+  const weatherStatus=msg=>{ui.weather.status=String(msg);const el=document.getElementById('ui-weather-status');if(el)el.textContent=msg;};
+  function updateWeatherDOM(){const w=ui.weather;
+    const bind=[['ui-weather-icon',w.icon||'☀️'],['ui-weather-temp',w.temperature||'--°'],['ui-weather-condition',w.condition||'Weather unavailable'],['ui-weather-location',w.city||'']];
+    for(const [id,v] of bind){const node=document.getElementById(id);if(node)node.textContent=v;}
+  }
+  async function weatherFetch(force=false){const w=ui.weather;
+    if(weatherBusy||!Number.isFinite(Number(w.lat))||!Number.isFinite(Number(w.lon))||w.lat===null||w.lon===null)return;
+    if(!force&&Date.now()-(w.lastSync||0)<25*60*1000){updateWeatherDOM();return;}
+    weatherBusy=true;
+    try{
+      const params=new URLSearchParams({latitude:String(w.lat),longitude:String(w.lon),current:'temperature_2m,weather_code,is_day',temperature_unit:w.unit||'fahrenheit',timezone:'auto'});
+      const response=await fetch('https://api.open-meteo.com/v1/forecast?'+params.toString(),{cache:'no-store'});
+      if(!response.ok)throw new Error('Weather service returned '+response.status);
+      const obj=await response.json();const cur=obj.current;
+      if(!cur||!Number.isFinite(Number(cur.temperature_2m)))throw new Error('No current conditions returned');
+      const label=weatherCode(cur.weather_code,cur.is_day);
+      w.temperature=Math.round(Number(cur.temperature_2m))+'°';w.condition=label.text;w.icon=label.icon;w.lastSync=Date.now();w.status='Updated '+new Date(w.lastSync).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+      // Keep exports and legacy clock working with the live reading.
+      S.wx.t=w.temperature;S.wx.city=w.condition;
+      save();updateWeatherDOM();weatherStatus(w.status);
+    }catch(err){weatherStatus('Weather unavailable: check your internet connection.');updateWeatherDOM();}
+    finally{weatherBusy=false;}
+  }
+  async function weatherCity(city){const val=String(city||'').trim();if(!val){weatherStatus('Enter a city first.');return;}
+    weatherStatus('Finding '+val+'…');
+    try{
+      const response=await fetch('https://geocoding-api.open-meteo.com/v1/search?'+new URLSearchParams({name:val,count:'1',language:'en',format:'json'}));
+      if(!response.ok)throw new Error('Geocoding unavailable');
+      const json=await response.json(),place=json.results?.[0];if(!place)throw new Error('City not found');
+      Object.assign(ui.weather,{mode:'city',city:[place.name,place.admin1].filter(Boolean).join(', '),lat:place.latitude,lon:place.longitude,lastSync:0});save();await weatherFetch(true);
+    }catch(err){weatherStatus('Could not find that city. Try another city name.');}
+  }
+  function weatherLocation(showAlert=false){const w=ui.weather;
+    if(weatherGeoBusy)return;
+    if(!navigator.geolocation){if(showAlert)weatherStatus('Location is unavailable. Enter a city instead.');return;}
+    weatherGeoBusy=true;
+    if(showAlert)weatherStatus('Requesting location permission…');
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      weatherGeoBusy=false;Object.assign(w,{mode:'auto',lat:pos.coords.latitude,lon:pos.coords.longitude,locAt:Date.now(),lastSync:0});
+      w.city='Current location';save();await weatherFetch(true);
+    },err=>{
+      weatherGeoBusy=false;
+      if(err.code===1)w.geoDenied=true;
+      if(!w.lastSync){w.condition='Choose a city in Settings';updateWeatherDOM();}
+      if(showAlert)weatherStatus('Location was not allowed. Enter a city instead.');
+      if(w.mode==='city'&&w.lat!=null)weatherFetch();
+    },{enableHighAccuracy:false,timeout:12000,maximumAge:20*60*1000});
+  }
+  function weatherAutoStart(){const w=ui.weather;
+    if(w.mode==='auto'&&!w.geoDenied&&(!w.locAt||Date.now()-w.locAt>60*60*1000)) weatherLocation(false);
+    else if(w.lat!=null&&w.lon!=null)weatherFetch();
+    else if(w.city&&w.mode==='city')weatherCity(w.city);
+    updateWeatherDOM();
+  }
   function doUiAction(t){const a=t.dataset.uiAction,k=t.dataset.key;
     if(a==='edit-home'){homeEditing=!homeEditing;render()}
     else if(a==='move')widgetMove(k,t.dataset.dir);
@@ -478,6 +567,9 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
     else if(a==='clear-icon'){ui.iconPhoto='';save();render()}
     else if(a==='clear-wallpaper'){ui.wallpaper='';save();render()}
     else if(a==='reset-home'){ui.widgetColumns=JSON.parse(JSON.stringify(DEFAULT_WIDGETS));ui.hiddenWidgets=['miniCal'];ui.hiddenLabels=[];ui.labels={};ui.labelColors={};save();render()}
+    else if(a==='weather-location'){ui.weather.geoDenied=false;weatherLocation(true)}
+    else if(a==='weather-city'){weatherCity(document.getElementById('ui-weather-city')?.value)}
+    else if(a==='weather-refresh'){if(ui.weather.mode==='auto')weatherLocation(true);else weatherFetch(true)}
   }
   document.addEventListener('click',e=>{const t=e.target.closest('[data-ui-action]');if(t){e.preventDefault();e.stopPropagation();doUiAction(t);return}
     if(e.target.id==='ui-label-sheet'||e.target.id==='ui-quick-task')e.target.remove();},true);
@@ -503,6 +595,10 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
   // Do not let a long press on a label cause a navigation click.
   document.addEventListener('click',e=>{if(longPressTriggered&&e.target.closest('[data-ui-label]')){e.preventDefault();e.stopImmediatePropagation();longPressTriggered=false}},true);
   theme();setVars();save();render();
+  // A saved city or authorized location updates on every app opening and every 30 minutes.
+  setTimeout(weatherAutoStart,350);
+  setInterval(weatherAutoStart,30*60*1000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)weatherAutoStart();});
 })();
 
 </script>
