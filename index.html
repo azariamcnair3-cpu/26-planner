@@ -10,7 +10,7 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{--bg:#f2f1f6;--card:#fcfcfe;--tx:#1b1b21;--mut:#6c6b78;--line:#e7e6ee;--red:#e5443a;--blue:#2f6fed;--sh:0 6px 24px rgba(40,30,90,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]):not([data-theme=dark]){--bg:#101015;--card:#1b1b23;--tx:#f1f1f6;--mut:#9a99a8;--line:#2b2b36;--sh:0 6px 24px rgba(0,0,0,.4);color-scheme:dark}}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]):not([data-theme=dark]):not([data-theme=glass]){--bg:#101015;--card:#1b1b23;--tx:#f1f1f6;--mut:#9a99a8;--line:#2b2b36;--sh:0 6px 24px rgba(0,0,0,.4);color-scheme:dark}}
 :root[data-theme=dark]{--bg:#101015;--card:#1b1b23;--tx:#f1f1f6;--mut:#9a99a8;--line:#2b2b36;--sh:0 6px 24px rgba(0,0,0,.4);color-scheme:dark}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 -apple-system,"SF Pro Text","SF Pro",Inter,system-ui,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
@@ -90,6 +90,63 @@ textarea{padding:10px 12px;min-height:120px;resize:vertical}
 .sync-source{display:grid;grid-template-columns:2fr 1fr;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
 .sync-check{display:flex;align-items:center;gap:9px}.sync-check input{width:22px;height:22px;flex:none}.sync-check span{font-weight:600;font-size:14px}.sync-check small{display:block;font-weight:400;color:var(--mut);font-size:12px}
 @media(max-width:620px){.sync-source{grid-template-columns:1fr}}
+
+/* Personal Planner · Apple-style interface upgrade. Purely visual; calendar-sync.js is unchanged. */
+:root { --app-accent:#7855c7; --user-font:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif; --user-scale:1; --radius-app:24px; --glass-border:rgba(255,255,255,.79); }
+html {scroll-padding-top:0}
+body {font-family:var(--user-font)!important;font-size:calc(16px * var(--user-scale)); min-height:100vh; }
+body::before {content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 23% 6%,rgba(192,207,235,.52),transparent 48%),radial-gradient(ellipse at 84% 74%,rgba(244,218,225,.6),transparent 45%),linear-gradient(125deg,#f9f9fc,#f1f4f9 60%,#f9f6f7);z-index:-2;pointer-events:none}
+:root[data-theme=light]{--bg:#f5f5f9;--card:rgba(255,255,255,.96);--tx:#1c1c1e;--mut:#777781;--line:#e4e4ea;--sh:0 9px 30px rgba(46,44,73,.045)}
+:root[data-theme=dark]{--bg:#121217;--card:rgba(32,32,39,.96);--tx:#f7f7fb;--mut:#aaa9b3;--line:#42414a;--sh:0 16px 44px rgba(0,0,0,.24);color-scheme:dark}
+:root[data-theme=dark] body::before {background:radial-gradient(ellipse at 15% 4%,#202334 0%,transparent 52%),linear-gradient(135deg,#101116,#232129 70%,#171923)}
+:root[data-theme=glass]{--bg:rgba(238,242,249,.55);--card:rgba(255,255,255,.50);--tx:#19191f;--mut:#666b79;--line:rgba(255,255,255,.68);--sh:0 13px 35px rgba(60,65,93,.085), inset 0 1px 0 rgba(255,255,255,.76);color-scheme:light}
+:root[data-theme=glass] body::before{background:radial-gradient(ellipse at 0% 16%,rgba(167,184,219,.7),transparent 52%),radial-gradient(ellipse at 85% 20%,rgba(225,215,245,.56),transparent 46%),radial-gradient(ellipse at 40% 110%,rgba(249,213,202,.47),transparent 45%),linear-gradient(130deg,#edf0f8,#f7f7fc)}
+body.ui-has-wallpaper::before{background-image:linear-gradient(rgba(236,237,246,.18),rgba(233,233,247,.26)),var(--user-wallpaper);background-size:cover;background-position:center}
+:root[data-theme=dark] body.ui-has-wallpaper::before{background-image:linear-gradient(rgba(8,8,15,.55),rgba(8,8,15,.65)),var(--user-wallpaper)}
+.side{width:180px;left:16px;top:16px;bottom:16px;border-radius:27px;padding:18px 10px;background:var(--card);border:1px solid var(--glass-border);box-shadow:var(--sh);gap:3px;}
+:root[data-theme=glass] .side,:root[data-theme=glass] .card,:root[data-theme=glass] .ui-panel,:root[data-theme=glass] .ui-glass-panel,:root[data-theme=glass] .sheet{backdrop-filter:blur(25px) saturate(135%);-webkit-backdrop-filter:blur(25px) saturate(135%);border:1px solid rgba(255,255,255,.72);box-shadow:0 12px 35px rgba(71,66,108,.09),inset 0 1.2px 1px rgba(255,255,255,.82),inset 0 -1px rgba(255,255,255,.18)}
+:root[data-theme=dark] .side,:root[data-theme=dark] .card,:root[data-theme=dark] .ui-panel{border-color:rgba(255,255,255,.1)}
+.brand{padding:6px 9px 19px;gap:9px}.brand .av{width:40px;height:40px;border-radius:12px;overflow:hidden;font-size:24px;background:linear-gradient(130deg,#fce8ef,#e3dbfc)}.brand .av img{width:100%;height:100%;object-fit:cover;display:block}.brand input{font-size:17px;font-weight:700;letter-spacing:-.03em}
+.nv{min-height:44px;border-radius:14px;padding:0 12px;font-size:14px;color:var(--mut)}.nv svg{width:18px;height:18px;flex:none}.nv.on{color:var(--app-accent)!important;background:color-mix(in srgb,var(--app-accent) 13%,var(--card))!important;font-weight:650}.nv:active,.btn:active{transform:scale(.985)}
+main{margin-left:208px;padding:18px 22px 48px 5px;max-width:none;width:calc(100% - 208px)}
+.card,.ui-panel{border-radius:var(--radius-app);background:var(--card);border:1px solid var(--glass-border);box-shadow:var(--sh);padding:20px}.card h1,.ui-panel h1{font-size:32px;letter-spacing:-.035em;font-weight:720}.card h2,.ui-panel h2{font-size:21px;font-weight:700;letter-spacing:-.025em}
+.btn,.chip,.seg{border-radius:999px}.btn{font-weight:560;border-color:var(--line);background:color-mix(in srgb,var(--card) 86%,var(--bg));box-shadow:0 1px 3px rgba(0,0,0,.025)}.btn.pri{background:var(--app-accent)!important;color:#fff}.btn.red{background:#f24b45}.btn.sq{font-weight:480}
+:root[data-theme=glass] .btn,:root[data-theme=glass] .chip,:root[data-theme=glass] .seg,:root[data-theme=glass] .ui-float{background:rgba(255,255,255,.34);border:1px solid rgba(255,255,255,.82);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 3px 9px rgba(57,70,91,.06),inset 0 1px rgba(255,255,255,.89)}
+:root[data-theme=glass] .seg button.on{background:rgba(255,255,255,.9)}
+:root[data-theme=dark] .btn{background:#35353f;border-color:#454550}
+input[type=text],input[type=date],input[type=time],input[type=number],select,textarea{background:color-mix(in srgb,var(--card) 75%,var(--bg));border:1px solid var(--line);border-radius:12px}
+input[type=checkbox]{accent-color:var(--app-accent)}
+input[type=color]{cursor:pointer}
+/* Home - precisely two balanced columns; widgets may reorder inside each column */
+.ui-home-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 12px}.ui-home-head h1{margin:0;font-size:26px;font-weight:720}.ui-home-head .sub{font-size:12px}
+.ui-home-grid{display:grid;grid-template-columns:minmax(0,.87fr) minmax(0,1.13fr);gap:16px;align-items:start}
+.ui-home-column{display:flex;flex-direction:column;gap:16px;min-width:0}.ui-home-column>.ui-panel{min-width:0}
+.ui-clock{min-height:166px;display:flex;justify-content:space-between;align-items:flex-start;gap:15px;padding:22px 24px}
+.ui-clock .ui-day{font-size:12px;color:#ee4c46;font-weight:750;text-transform:uppercase;letter-spacing:.04em}.ui-clock .ui-date{font-size:19px;font-weight:610;letter-spacing:-.02em}.ui-clock .clk{font-size:64px;line-height:1.05;font-weight:300;letter-spacing:-.055em;padding-top:6px;white-space:nowrap;background:none!important;text-shadow:none!important;box-shadow:none!important}
+.ui-clock .clk span{background:none!important;box-shadow:none!important;text-shadow:none!important;color:var(--mut)!important}
+.ui-weather{text-align:right;min-width:125px}.ui-weather .ui-wtemp{display:flex;justify-content:flex-end;gap:4px;align-items:center}.ui-weather .ui-wtemp input{font-weight:330;font-size:36px!important;text-align:right;width:105px!important;min-height:41px;border:0;background:transparent;padding:0}.ui-weather #wc{font-size:13px;text-align:right;border:0;background:transparent;padding:0;max-width:140px}
+.ui-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.ui-panel-head h2{margin:0}.ui-home-upcoming .up{padding:9px 0}.ui-home-upcoming .up i{width:4px}.ui-home-upcoming .grp{margin-top:12px}.ui-home-upcoming{min-height:350px}
+.ui-photo{padding:8px!important}.ui-photo .ph{min-height:285px;height:355px;border-radius:19px}.ui-photo .ph img{height:100%;max-height:none;object-fit:cover}.ui-photo-tools{display:flex;justify-content:space-between;align-items:center;gap:7px;padding:10px 7px 3px}.ui-photo .ui-photo-tools .btn{min-height:36px;font-size:13px}
+.ui-home-tasks{min-height:260px}.ui-home-task-row{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.ui-home-task-row input{width:22px;height:22px;flex:none}.ui-home-task-row .ui-task-title{flex:1;min-width:0}.ui-category-tag{display:inline-flex;font-size:11px;line-height:1.2;align-items:center;border-radius:99px;padding:5px 10px;font-weight:600;white-space:nowrap;background:color-mix(in srgb,var(--c) 20%,var(--card));color:var(--tx)}
+.ui-widget-handle{display:none;align-items:center;gap:4px;padding:6px;background:var(--bg);border-radius:13px;margin-top:12px;flex-wrap:wrap}.ui-home-editing .ui-widget-handle{display:flex}.ui-widget-handle button{padding:4px 8px;font-size:12px;min-height:34px;border-radius:10px;border:1px solid var(--line)}
+[data-ui-label]{touch-action:pan-y;-webkit-user-select:none;user-select:none;cursor:context-menu}
+.ui-home-mini .dow{margin-top:12px}.ui-home-mini .mg .dc{min-height:45px}.ui-home-mini .mg .pill{display:none}
+.ui-empty{font-size:14px;color:var(--mut);padding:12px 0}
+/* iCloud Calendar-inspired grid */
+.ui-cal-header .lab{color:#fc4c42}.ui-cal-header .hd{align-items:center}.ui-cal-header h1{font-size:36px}.ui-cal-header .chips{margin:12px 0 16px}.ui-cal-header .chip{font-weight:570}.ui-cal-header .pill{font-size:11px;background:color-mix(in srgb,var(--c) 18%,transparent);border-left:3px solid var(--c);color:var(--tx);padding:3px 5px}.ui-cal-header .mg{background:color-mix(in srgb,var(--card) 85%,transparent);border-top:1px solid var(--line);border-left:1px solid var(--line)}.ui-cal-header .dc{min-height:clamp(90px,calc((100vh - 265px)/5),155px);padding:5px}.ui-cal-header .dn{font-weight:520;font-size:14px}.ui-cal-header .dn.t{background:#ff3b30}.ui-cal-header .dc.o{opacity:.45}
+/* Task and category pages: Apple Reminders density */
+.ui-page-head{margin-bottom:15px}.ui-page-head .lab{color:var(--app-accent)}.ui-page-head h1{font-size:36px;margin:4px 0 6px}.ui-page-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.04fr);gap:16px;align-items:start}
+.ui-task-page .ui-task-filter{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.ui-task-page .ui-task-filter button{border-radius:999px;min-height:36px;padding:0 13px;border:1px solid var(--line);background:var(--card)}.ui-task-page .ui-task-filter button.active{background:color-mix(in srgb,var(--app-accent) 15%,var(--card));border-color:color-mix(in srgb,var(--app-accent) 35%,transparent);color:var(--app-accent)}
+.ui-task-item{display:flex;gap:10px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line)}.ui-task-item input{flex:none;width:22px;height:22px}.ui-task-item .text{flex:1;min-width:0;font-size:15px}.ui-task-item .date{color:var(--mut);font-size:12px}.ui-task-item .ui-icon-edit{font-size:16px;min-height:34px;width:34px;flex:none}.ui-task-item:last-child{border:0}
+.ui-category-title{font-size:34px;margin:2px 0 6px}.ui-category-col .up{padding:10px 0}.ui-category-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.ui-task-form{display:grid;grid-template-columns:1fr 160px 150px auto;gap:8px;align-items:center;margin:15px 0 0}
+/* Settings customization */
+.ui-settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.ui-settings-card{padding:18px;border:1px solid var(--line);border-radius:22px;background:color-mix(in srgb,var(--card) 89%,transparent)}.ui-settings-card h2{font-size:19px;margin:0 0 14px}.ui-settings-line{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}.ui-settings-line:last-child{border:0}.ui-settings-line>label{flex:1;min-width:0;font-size:14px;font-weight:600}.ui-settings-line input[type=color]{width:62px;height:41px;border:0;background:transparent}.ui-settings-line select{max-width:230px}.ui-settings-stack{display:grid;gap:10px}.ui-theme-select{display:flex;gap:9px;flex-wrap:wrap}.ui-theme-select button{flex:1;min-width:110px;min-height:65px;border-radius:17px;border:1px solid var(--line);background:var(--card);font-weight:650}.ui-theme-select button.selected{outline:2px solid var(--app-accent);color:var(--app-accent);outline-offset:-3px}.ui-settings-card .sub{font-size:13px}.ui-photo-uploader{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ui-settings-card input[type=range]{width:150px;accent-color:var(--app-accent)}.ui-widget-settings{display:grid;gap:6px}.ui-widget-settings label{display:flex;align-items:center;gap:8px;font-size:13px}.ui-widget-settings input{width:19px;height:19px}
+/* Responsive: maintain two columns in iPad landscape and one on narrower layouts */
+@media(min-width:821px) and (max-width:1100px){.side{width:160px;left:10px}.nv{font-size:13px}.brand input{font-size:15px}main{margin-left:181px;width:calc(100% - 181px);padding:12px 12px 36px 0}.ui-home-grid{grid-template-columns:minmax(0,.87fr) minmax(0,1.13fr)}.ui-clock .clk{font-size:52px}.ui-clock{padding:18px}.ui-home-tasks .ui-category-tag{font-size:10px}}
+@media(max-width:820px){.side{left:10px;top:10px;bottom:10px;z-index:35}main{width:100%;margin:0;padding:10px}.ui-home-grid,.ui-page-grid,.ui-settings-grid{grid-template-columns:1fr}.ui-home-head{padding-top:3px}.ui-home-column{gap:12px}.ui-task-form{grid-template-columns:1fr 1fr}.ui-photo .ph{height:275px}}
+@media(max-width:450px){.ui-task-form{grid-template-columns:1fr}.ui-clock .clk{font-size:50px}.ui-weather .ui-wtemp input{font-size:29px!important;width:85px!important}.ui-task-item .ui-category-tag{display:none}}
+
 </style></head><body>
 <nav class="side" id="side" aria-label="Sections"></nav>
 <main id="m"></main><div id="pr"></div><div id="ov"></div>
@@ -280,4 +337,173 @@ setInterval(()=>{const c=$('#clk');if(c){const d=new Date();c.innerHTML=((d.getH
 save();render();setTimeout(()=>{const c=$('#clk');if(c){const d=new Date();c.innerHTML=((d.getHours()%12)||12)+':'+pad(d.getMinutes())+' <span style="font-size:20px;color:var(--mut)">'+(d.getHours()<12?'AM':'PM')+'</span>'}},0);
 if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script>
-<script src="calendar-sync.js"></script></body></html>
+<script src="calendar-sync.js"></script>
+<script id="planner-apple-enhancements">
+/*
+ * Personal Planner 2026 · editable iPadOS-inspired interface
+ * Keeps the original S, events, tasks, exports, and calendar-sync.js intact.
+ * All visual customizations auto-save to the existing famplanner1 local-storage record.
+ */
+(() => {
+  'use strict';
+  const DEFAULT_WIDGETS = {left:['clock','upcoming'],right:['photo','tasks','miniCal']};
+  const WN = {clock:'Date & Time',upcoming:'Up Next',photo:'Photo',tasks:'My To Do',miniCal:'Mini Calendar'};
+  const ui = S.ui ||= {};
+  ui.widgetColumns ||= JSON.parse(JSON.stringify(DEFAULT_WIDGETS));
+  ui.widgetColumns.left ||= [...DEFAULT_WIDGETS.left];
+  ui.widgetColumns.right ||= [...DEFAULT_WIDGETS.right];
+  // Add new widget types gently, without overriding a saved arrangement.
+  for(const [side,names] of Object.entries(DEFAULT_WIDGETS)) for(const name of names){
+    if(![...ui.widgetColumns.left,...ui.widgetColumns.right].includes(name)) ui.widgetColumns[side].push(name);
+  }
+  ui.hiddenWidgets ||= ['miniCal'];
+  ui.hiddenLabels ||= [];
+  ui.labels ||= {};
+  ui.labelColors ||= {};
+  ui.accent ||= '#7956c6';
+  ui.font ||= 'system';
+  ui.fontSize ||= 100;
+  ui.iconPhoto ||= '';
+  ui.wallpaper ||= '';
+  ui.homeShowNote ||= false;
+  ui.homeEdit ||= false;
+  if(!ui.design2026){
+    ui.design2026 = true;
+    // The requested new look begins in Glass, without altering existing tasks or connections.
+    if(S.theme==='light'||S.theme==='system')S.theme='glass';
+  }
+  let homeEditing=false;
+  let taskView='all';
+  let longPressTimer=0,longPressTriggered=false;
+  const allowedFonts={system:"-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",rounded:"ui-rounded,-apple-system,'Arial Rounded MT Bold',sans-serif",avenir:"'Avenir Next',Avenir,-apple-system,sans-serif",serif:"Georgia,'New York',serif",mono:"ui-monospace,'SF Mono',Menlo,monospace"};
+  const setVars=()=>{
+    const root=document.documentElement;
+    root.style.setProperty('--app-accent',/^#[0-9a-f]{6}$/i.test(ui.accent)?ui.accent:'#7956c6');
+    root.style.setProperty('--user-font',allowedFonts[ui.font]||allowedFonts.system);
+    root.style.setProperty('--user-scale',String(Math.max(85,Math.min(120,Number(ui.fontSize)||100))/100));
+    if(ui.wallpaper){document.body.style.setProperty('--user-wallpaper',`url("${ui.wallpaper}")`);document.body.classList.add('ui-has-wallpaper')}
+    else {document.body.classList.remove('ui-has-wallpaper');document.body.style.removeProperty('--user-wallpaper')}
+  };
+  const safe=x=>esc(x);
+  const dt=new Date();
+  const fmtDay=d=>['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
+  const listUpcoming=(category=null,days=30,limit=15)=>{
+    const dates=[];const now=new Date();
+    for(let i=0;i<days;i++){const day=ad(now,i),events=occ(day).filter(e=>!category||e.p===category);
+      if(events.length)dates.push({day,items:events.slice(0,20)});}
+    return dates.slice(0,limit);
+  };
+  const wlabel=k=>ui.labels[k]||WN[k]||k;
+  const heading=(key,tag='h2')=>ui.hiddenLabels.includes(key)?'':`<${tag} data-ui-label="${safe(key)}" style="${ui.labelColors[key]?'color:'+ui.labelColors[key]:''}" title="Hold to rename, recolor or hide">${safe(wlabel(key))}</${tag}>`;
+  const widgetControls=(key)=>`<div class="ui-widget-handle" aria-label="Rearrange ${safe(wlabel(key))}"><strong style="font-size:12px;margin-right:3px">Move widget</strong><button data-ui-action="move" data-key="${key}" data-dir="up" title="Move up">↑</button><button data-ui-action="move" data-key="${key}" data-dir="down" title="Move down">↓</button><button data-ui-action="move" data-key="${key}" data-dir="side">Other column</button><button data-ui-action="hide-widget" data-key="${key}">Hide</button></div>`;
+  function imageWidget(){
+    const photo=S.photo?`<img src="${S.photo}" alt="Your chosen Home photo">`:`<span class="sub">Your photo will go here. Tap Choose photo below.</span>`;
+    return `<section class="ui-panel ui-photo" data-widget="photo"><div class="ph">${photo}${S.photoDate?`<small>${safe(S.photoDate)}</small>`:''}</div><div class="ui-photo-tools"><span class="sub">Your photo</span><label class="btn">${S.photo?'Change photo':'Choose photo'}<input id="pf" type="file" accept="image/*" hidden></label></div>${widgetControls('photo')}</section>`;
+  }
+  function timeWidget(){const now=new Date();return `<section class="ui-panel ui-clock" data-widget="clock"><div><div class="ui-day">${fmtDay(now)}</div><div class="ui-date">${MN[now.getMonth()]} ${now.getDate()}</div><div class="clk" id="clk">${(now.getHours()%12)||12}:${pad(now.getMinutes())} <span style="font-size:20px;color:var(--mut)">${now.getHours()<12?'AM':'PM'}</span></div></div><div class="ui-weather"><div class="ui-wtemp"><span aria-hidden="true" style="font-size:26px">☀️</span><input id="wt" type="text" value="${safe(S.wx.t||'')}" placeholder="--°" aria-label="Temperature" maxlength="10"></div><input id="wc" type="text" value="${safe(S.wx.city||'')}" placeholder="Add weather note" aria-label="Weather description"></div>${widgetControls('clock')}</section>`;}
+  function upcomingWidget(){const dates=listUpcoming(null,21,12);const out=dates.length?dates.map(({day,items})=>{
+    const h=`<div class="grp ${ymd(day)===ymd(new Date())?'t':''}">${fmtDay(day).toUpperCase()} <span style="font-weight:500">${MN[day.getMonth()].slice(0,3)} ${day.getDate()}</span></div>`;
+    return h+items.map(e=>`<button class="up" data-a="edit" data-id="${safe(e.id)}" style="--c:${pp(e.p).c}"><i></i><div><b>${safe(e.t)}</b><span>${e.ad?'All-day':f12(e.st)+(e.en?' – '+f12(e.en):'')}${e.n?' · '+safe(e.n):''}</span></div></button>`).join('');
+  }).join(''):'<p class="ui-empty">No events coming up. Add an event in Calendar.</p>';
+  return `<section class="ui-panel ui-home-upcoming" data-widget="upcoming"><div class="ui-panel-head">${heading('upcoming')}<button class="btn" data-a="go" data-v="cal" style="min-height:34px;font-size:13px">View Calendar</button></div>${out}${widgetControls('upcoming')}</section>`;
+  }
+  function taskTag(k){return `<span class="ui-category-tag" style="--c:${pp(k).c}">${safe(pp(k).n)}</span>`}
+  function homeTasksWidget(){const ts=S.tk.filter(t=>!t.x).sort((a,b)=>(a.d||'9999').localeCompare(b.d||'9999')).slice(0,7);
+    return `<section class="ui-panel ui-home-tasks" data-widget="tasks"><div class="ui-panel-head">${heading('tasks')}<button class="btn" data-a="go" data-v="tasks" style="min-height:34px;font-size:13px">All Tasks</button></div>${ts.length?ts.map(t=>`<div class="ui-home-task-row"><input type="checkbox" data-a="tick" data-id="${safe(t.id)}" aria-label="Complete ${safe(t.t)}"><span class="ui-task-title">${safe(t.t)}</span>${taskTag(t.p)}<button class="btn sq" style="width:32px;min-height:32px;font-size:15px" data-a="edittk" data-id="${safe(t.id)}" aria-label="Edit task">✎</button></div>`).join(''):'<p class="ui-empty">Nothing on your to-do list yet.</p>'}<div class="ctl" style="margin-top:12px"><button class="btn" data-ui-action="quick-task" style="min-height:36px;font-size:13px">+ Add Task</button></div>${widgetControls('tasks')}</section>`;
+  }
+  function miniWidget(){const prev=C;let content='';try{C=new Date();content=mgrid();}finally{C=prev}
+    return `<section class="ui-panel ui-home-mini" data-widget="miniCal"><div class="ui-panel-head">${heading('miniCal')}<button class="btn" data-a="go" data-v="cal" style="min-height:34px;font-size:13px">Open</button></div>${content}${widgetControls('miniCal')}</section>`;
+  }
+  const factory={clock:timeWidget,upcoming:upcomingWidget,photo:imageWidget,tasks:homeTasksWidget,miniCal:miniWidget};
+  function modernHome(){const left=ui.widgetColumns.left.filter(k=>!ui.hiddenWidgets.includes(k)),right=ui.widgetColumns.right.filter(k=>!ui.hiddenWidgets.includes(k));
+    const draw=ids=>ids.map(k=>factory[k]?.()||'').join('');
+    return `<div class="ui-home-head"><div><h1>Home</h1><div class="sub">Your calendar and to-do list, in one place.</div></div><button class="btn" data-ui-action="edit-home">${homeEditing?'Done editing':'Customize Home'}</button></div><div class="ui-home-grid ${homeEditing?'ui-home-editing':''}"><div class="ui-home-column" id="ui-home-left">${draw(left)}</div><div class="ui-home-column" id="ui-home-right">${draw(right)}</div></div>`;
+  }
+  function modernTasks(){let tasks=S.tk.slice().sort((a,b)=>a.x-b.x||(a.d||'9999').localeCompare(b.d||'9999'));
+    if(taskView==='today'){tasks=tasks.filter(x=>x.d===ymd(new Date())&&!x.x)}
+    else if(taskView==='completed'){tasks=tasks.filter(x=>x.x)}
+    else if(['school','professional','personal'].includes(taskView)){tasks=tasks.filter(x=>x.p===taskView)}
+    else if(taskView==='upcoming'){tasks=tasks.filter(x=>!x.x&&x.d&&x.d>ymd(new Date()))}
+    const filters=[['all','All'],['today','Today'],['upcoming','Upcoming'],['school','School'],['professional','Professional'],['personal','Personal'],['completed','Completed']];
+    return `<div class="ui-task-page"><div class="ui-page-head"><div class="lab">✓ My Planner</div><h1>To Do</h1><div class="sub">Your tasks save automatically as you check them off.</div></div><section class="ui-panel"><div class="ui-task-filter">${filters.map(([k,l])=>`<button class="${taskView===k?'active':''}" data-ui-action="task-filter" data-key="${k}">${l}</button>`).join('')}</div><div class="ui-task-form"><input id="tt" type="text" placeholder="Add a task…" aria-label="Task"><select id="tp" aria-label="Category">${P.map(p=>`<option value="${p.id}">${p.e} ${safe(p.n)}</option>`).join('')}</select><input id="td" type="date" aria-label="Due date"><button class="btn pri" data-a="addtk">Add</button></div></section><section class="ui-panel" style="margin-top:15px"><div class="ui-panel-head"><h2>${safe((filters.find(f=>f[0]===taskView)||['','All'])[1])} Tasks</h2><span class="sub">${tasks.length} tasks</span></div>${tasks.length?tasks.map(t=>`<div class="ui-task-item"><input type="checkbox" ${t.x?'checked':''} data-a="tick" data-id="${safe(t.id)}" aria-label="Complete task"><div class="text ${t.x?'done':''}">${safe(t.t)}</div><span class="date">${t.d?safe(t.d):''}</span>${taskTag(t.p)}<button class="btn sq ui-icon-edit" data-a="edittk" data-id="${safe(t.id)}" aria-label="Edit task">✎</button></div>`).join(''):'<p class="ui-empty">No tasks in this view.</p>'}</section></div>`;
+  }
+  function modernSection(k){const p=pp(k),dates=listUpcoming(k,75,24),events=dates.map(({day,items})=>`<div class="grp">${fmtDay(day).toUpperCase()} ${MN[day.getMonth()].slice(0,3)} ${day.getDate()}</div>`+items.map(e=>`<button class="up" data-a="edit" data-id="${safe(e.id)}" style="--c:${p.c}"><i></i><div><b>${safe(e.t)}</b><span>${e.ad?'All-day':f12(e.st)+(e.en?' – '+f12(e.en):'')}</span></div></button>`).join('')).join('');
+    const ts=S.tk.filter(t=>t.p===k).sort((a,b)=>a.x-b.x||(a.d||'9999').localeCompare(b.d||'9999'));
+    return `<div class="ui-page-head"><div class="lab" style="color:${p.c}">${safe(p.e)} ${safe(p.n)}</div><h1 class="ui-category-title">${safe(p.n)}</h1><div class="sub">Your ${safe(p.n.toLowerCase())} events and tasks, together.</div></div><div class="ui-page-grid"><section class="ui-panel ui-category-col"><div class="ui-category-head"><h2>Upcoming Calendar</h2><button class="btn" data-a="newcat" data-k="${k}">+ Event</button></div>${events||'<p class="ui-empty">No upcoming events in this category.</p>'}</section><section class="ui-panel"><div class="ui-category-head"><h2>To Do</h2><button class="btn" data-ui-action="quick-task" data-category="${k}">+ Task</button></div>${ts.length?ts.map(t=>`<div class="ui-task-item"><input type="checkbox" data-a="tick" data-id="${safe(t.id)}" ${t.x?'checked':''}><div class="text ${t.x?'done':''}">${safe(t.t)}${t.d?`<div class="date">Due ${safe(t.d)}</div>`:''}</div><button class="btn sq ui-icon-edit" data-a="edittk" data-id="${safe(t.id)}">✎</button></div>`).join(''):'<p class="ui-empty">No tasks here yet.</p>'}</section></div>`;
+  }
+  // Customize/settings UI injected into existing Settings, which already includes the working calendar bridge.
+  function customizationPanel(){const opts=(selected,values)=>values.map(([key,label])=>`<option value="${key}" ${selected===key?'selected':''}>${label}</option>`).join('');
+    const themes=[['light','☀ Light'],['dark','☾ Dark'],['glass','◈ Glass']];
+    const widgetRows=Object.keys(WN).map(k=>`<label><input type="checkbox" data-ui-visible="${k}" ${ui.hiddenWidgets.includes(k)?'':'checked'}><span>${safe(WN[k])}</span></label>`).join('');
+    const labelRows=Object.keys(WN).filter(k=>k!=='clock'&&k!=='photo').map(k=>`<div class="ui-settings-line"><label>${safe(WN[k])} title</label><input type="text" data-ui-label-input="${k}" value="${safe(wlabel(k))}" style="max-width:180px"><input type="color" data-ui-label-color="${k}" value="${ui.labelColors[k]||ui.accent}" title="Title color" style="width:44px;height:38px;padding:0;border:0;background:transparent"><label style="display:flex;align-items:center;gap:5px;flex:0;width:auto;white-space:nowrap;font-size:12px"><input type="checkbox" data-ui-hide-label="${k}" ${ui.hiddenLabels.includes(k)?'checked':''}>Hide</label></div>`).join('');
+    return `<div class="ui-settings-grid" id="ui-settings"><section class="ui-settings-card"><h2>Appearance</h2><div class="ui-theme-select">${themes.map(([k,label])=>`<button type="button" class="${S.theme===k?'selected':''}" data-ui-action="theme" data-key="${k}">${label}</button>`).join('')}</div><p class="sub">Choose Light, Dark, or transparent Glass. Changes save instantly.</p><div class="ui-settings-line"><label>Accent color</label><input type="color" id="ui-accent" value="${safe(ui.accent)}"></div><div class="ui-settings-line"><label>Font</label><select id="ui-font">${opts(ui.font,[['system','Apple system'],['rounded','Rounded'],['avenir','Avenir Next'],['serif','Serif'],['mono','Monospaced']])}</select></div><div class="ui-settings-line"><label>Font size <span id="ui-size-value">${ui.fontSize}%</span></label><input type="range" min="85" max="120" step="5" id="ui-fontsize" value="${ui.fontSize}"></div><div class="ui-settings-line"><label>Planner icon</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Upload image<input id="ui-icon-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-icon" style="min-height:36px;font-size:12px">Reset</button></div></div><div class="ui-settings-line"><label>Background photo</label><div class="ui-photo-uploader"><label class="btn" style="font-size:12px;min-height:36px">Choose photo<input id="ui-wallpaper-file" type="file" accept="image/*" hidden></label><button class="btn" data-ui-action="clear-wallpaper" style="min-height:36px;font-size:12px">Clear</button></div></div></section><section class="ui-settings-card"><h2>Customize Home</h2><p class="sub">Choose which widgets appear on Home, and rearrange them with the Customize Home button on the Home tab.</p><div class="ui-widget-settings">${widgetRows}</div><div class="ui-settings-line"><label>Reset Home layout</label><button class="btn" data-ui-action="reset-home" style="min-height:36px;font-size:12px">Restore arrangement</button></div><h2 style="margin-top:18px">Edit or hide widget titles</h2><p class="sub">You can also press and hold a Home heading to rename or hide it.</p>${labelRows}</section></div>`;
+  }
+  const oldHome=home,oldTasks=tasks,oldSection=section,oldSettings=sets,oldCal=cal,oldRender=render;
+  home=modernHome;tasks=modernTasks;section=modernSection;
+  cal=function(){return `<div class="ui-cal-header">${oldCal()}</div>`;};
+  sets=function(){let h=oldSettings();
+    // Replace the original small theme dropdown with a true 3-choice Appearance control.
+    h=h.replace(/<label class="sub">Planner appearance<select id="theme">[\s\S]*?<\/select><\/label>/,'');
+    h=h.replace('<h1>Settings</h1></div>','<h1>Settings</h1></div>'+customizationPanel());
+    return h;
+  };
+  render=function(){setVars();oldRender();const b=document.querySelector('.brand .av');if(b&&ui.iconPhoto)b.innerHTML=`<img src="${ui.iconPhoto}" alt="Planner icon">`;
+    const icons={school:'M2 10l10-6 10 6-10 6-10-6zM6 12v5c3.5 2.8 8.5 2.8 12 0v-5',professional:'M3 7h18v13H3zM8 7V4h8v3M3 12h18',personal:'M20.8 4.6a5.2 5.2 0 0 0-7.4 0L12 6 10.6 4.6a5.2 5.2 0 0 0-7.4 7.4L12 21l8.8-9a5.2 5.2 0 0 0 0-7.4z'};for(const [name,path] of Object.entries(icons)){const svg=document.querySelector(`.side [data-v="${name}"] svg path`);if(svg)svg.setAttribute('d',path)}
+    const homeRoot=document.querySelector('.ui-home-grid');if(homeRoot&&homeEditing)homeRoot.classList.add('ui-home-editing');
+    // The original Calendar bridge injects its own Settings and event editor; never replace those controls.
+  };
+  function quickTask(category){const select=category||(['school','professional','personal'].includes(taskView)?taskView:'personal');
+    const box=document.createElement('div');box.className='ov';box.id='ui-quick-task';box.innerHTML=`<div class="sheet" role="dialog" aria-label="Add task"><h2>New task</h2><label>What needs to be done?<input id="ui-task-text" type="text" placeholder="Task title"></label><label>Category<select id="ui-task-cat">${P.map(p=>`<option value="${p.id}" ${select===p.id?'selected':''}>${p.e} ${safe(p.n)}</option>`).join('')}</select></label><label>Due date (optional)<input type="date" id="ui-task-date"></label><div class="ctl" style="justify-content:flex-end"><button class="btn" data-ui-action="close-quick">Cancel</button><button class="btn pri" data-ui-action="save-quick">Add task</button></div></div>`;
+    document.body.appendChild(box);setTimeout(()=>document.querySelector('#ui-task-text')?.focus(),20);
+  }
+  function showLabelSheet(key){const prev=document.getElementById('ui-label-sheet');prev?.remove();
+    const box=document.createElement('div');box.className='ov';box.id='ui-label-sheet';box.innerHTML=`<div class="sheet" role="dialog" aria-label="Edit widget text"><h2>Edit Home title</h2><p class="sub">Rename this heading or hide just its title. The widget itself stays on your Home screen.</p><label>Text<input id="ui-label-edit" type="text" maxlength="50" value="${safe(wlabel(key))}"></label><label>Title color<input id="ui-label-color" type="color" value="${ui.labelColors[key]||ui.accent}" style="width:90px;height:43px;border:0;background:none"></label><div class="ctl" style="justify-content:flex-end;flex-wrap:wrap"><button class="btn" data-ui-action="close-label">Cancel</button><button class="btn" data-ui-action="hide-label" data-key="${key}">Hide title</button><button class="btn pri" data-ui-action="save-label" data-key="${key}">Save wording</button></div></div>`;document.body.appendChild(box);
+  }
+  function widgetMove(key,dir){const oldSide=ui.widgetColumns.left.includes(key)?'left':'right',other=oldSide==='left'?'right':'left',arr=ui.widgetColumns[oldSide],idx=arr.indexOf(key);if(idx<0)return;
+    if(dir==='side'){arr.splice(idx,1);ui.widgetColumns[other].push(key)}else{const next=dir==='up'?idx-1:idx+1;if(next>=0&&next<arr.length){[arr[idx],arr[next]]=[arr[next],arr[idx]];}}
+    save();render();
+  }
+  function doUiAction(t){const a=t.dataset.uiAction,k=t.dataset.key;
+    if(a==='edit-home'){homeEditing=!homeEditing;render()}
+    else if(a==='move')widgetMove(k,t.dataset.dir);
+    else if(a==='hide-widget'){if(!ui.hiddenWidgets.includes(k))ui.hiddenWidgets.push(k);save();render()}
+    else if(a==='task-filter'){taskView=k;render()}
+    else if(a==='quick-task')quickTask(t.dataset.category);
+    else if(a==='close-quick'){document.querySelector('#ui-quick-task')?.remove()}
+    else if(a==='save-quick'){const txt=document.querySelector('#ui-task-text')?.value.trim();if(!txt)return toast('Enter a task title.');S.tk.push({id:uid(),t:txt,p:document.querySelector('#ui-task-cat').value,d:document.querySelector('#ui-task-date').value,x:0});save();document.querySelector('#ui-quick-task')?.remove();render();}
+    else if(a==='close-label')document.querySelector('#ui-label-sheet')?.remove();
+    else if(a==='save-label'){ui.labels[k]=document.querySelector('#ui-label-edit').value.trim().slice(0,50)||WN[k];ui.labelColors[k]=document.querySelector('#ui-label-color')?.value||ui.accent;ui.hiddenLabels=ui.hiddenLabels.filter(x=>x!==k);save();document.querySelector('#ui-label-sheet')?.remove();render()}
+    else if(a==='hide-label'){if(!ui.hiddenLabels.includes(k))ui.hiddenLabels.push(k);save();document.querySelector('#ui-label-sheet')?.remove();render()}
+    else if(a==='theme'){S.theme=k;theme();save();render()}
+    else if(a==='clear-icon'){ui.iconPhoto='';save();render()}
+    else if(a==='clear-wallpaper'){ui.wallpaper='';save();render()}
+    else if(a==='reset-home'){ui.widgetColumns=JSON.parse(JSON.stringify(DEFAULT_WIDGETS));ui.hiddenWidgets=['miniCal'];ui.hiddenLabels=[];ui.labels={};ui.labelColors={};save();render()}
+  }
+  document.addEventListener('click',e=>{const t=e.target.closest('[data-ui-action]');if(t){e.preventDefault();e.stopPropagation();doUiAction(t);return}
+    if(e.target.id==='ui-label-sheet'||e.target.id==='ui-quick-task')e.target.remove();},true);
+  document.addEventListener('change',e=>{const t=e.target;
+    if(t.dataset.uiVisible){ui.hiddenWidgets=ui.hiddenWidgets.filter(x=>x!==t.dataset.uiVisible);if(!t.checked)ui.hiddenWidgets.push(t.dataset.uiVisible);save();render();}
+    else if(t.dataset.uiHideLabel){ui.hiddenLabels=ui.hiddenLabels.filter(x=>x!==t.dataset.uiHideLabel);if(t.checked)ui.hiddenLabels.push(t.dataset.uiHideLabel);save();render();}
+    else if(t.dataset.uiLabelColor){ui.labelColors[t.dataset.uiLabelColor]=t.value;save();render()}
+    else if(t.id==='ui-font'){ui.font=t.value;save();render()}
+    else if(t.id==='ui-accent'){ui.accent=t.value;save();render()}
+    else if(t.id==='ui-fontsize'){ui.fontSize=Number(t.value);save();render()}
+    else if(t.id==='ui-icon-file'&&t.files?.[0])compress(t.files[0],220,.85,s=>{ui.iconPhoto=s;save();render()})
+    else if(t.id==='ui-wallpaper-file'&&t.files?.[0])compress(t.files[0],1500,.73,s=>{ui.wallpaper=s;save();render()})
+  },true);
+  document.addEventListener('input',e=>{const t=e.target;
+    if(t.dataset.uiLabelInput){ui.labels[t.dataset.uiLabelInput]=t.value.slice(0,50);save();}
+    else if(t.id==='ui-fontsize'){const out=document.getElementById('ui-size-value');if(out)out.textContent=t.value+'%';document.documentElement.style.setProperty('--user-scale',String(Number(t.value)/100));}
+  },true);
+  function compress(file,max,quality,cb){if(!file.type.startsWith('image/'))return toast('Choose an image.');const reader=new FileReader();reader.onload=()=>{const im=new Image();im.onload=()=>{const ratio=Math.min(1,max/Math.max(im.width,im.height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(im.width*ratio));canvas.height=Math.max(1,Math.round(im.height*ratio));canvas.getContext('2d').drawImage(im,0,0,canvas.width,canvas.height);cb(canvas.toDataURL('image/jpeg',quality))};im.onerror=()=>toast('Could not read photo');im.src=reader.result};reader.onerror=()=>toast('Could not read photo');reader.readAsDataURL(file)}
+  function holdTargetFrom(e){const t=e.target.closest('[data-ui-label]');return t?.dataset.uiLabel||null}
+  document.addEventListener('pointerdown',e=>{const key=holdTargetFrom(e);if(!key||e.button!==0)return;longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;showLabelSheet(key);},650);},true);
+  ['pointerup','pointercancel','pointermove','scroll'].forEach(kind=>document.addEventListener(kind,()=>clearTimeout(longPressTimer),true));
+  document.addEventListener('contextmenu',e=>{const key=holdTargetFrom(e);if(key){e.preventDefault();clearTimeout(longPressTimer);if(!longPressTriggered)showLabelSheet(key)}},true);
+  // Do not let a long press on a label cause a navigation click.
+  document.addEventListener('click',e=>{if(longPressTriggered&&e.target.closest('[data-ui-label]')){e.preventDefault();e.stopImmediatePropagation();longPressTriggered=false}},true);
+  theme();setVars();save();render();
+})();
+
+</script>
+</body></html>
