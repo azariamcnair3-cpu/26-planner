@@ -151,6 +151,12 @@
     for(const o of remotes){if(!o?.id)continue;seen.add(String(o.id));const ext=known.get(String(o.id));if(o.status==='cancelled'){
         if(ext&&!ext.syncDirty)S.ev=S.ev.filter(e=>e!==ext);
         continue;}
+     if (provider === 'google' && o.eventType === 'workingLocation') {
+      if (ext) { 
+        S.ev = S.ev.filter(e => e !== ext);
+  }
+     continue;
+}
       const fields=mapper(o);if(!fields.date||fields.date==='NaN-NaN-NaN')continue;
       if(ext){if(ext.syncDirty){if(ext.syncEtag&&o.etag&&ext.syncEtag!==o.etag)ext.syncConflict=true;continue;}
         Object.assign(ext,fields,{p:c.category||'personal',syncEtag:o.etag||'',syncManaged:ext.syncManaged||false,syncConflict:false});updated++;
