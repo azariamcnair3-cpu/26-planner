@@ -894,7 +894,7 @@ function onPointerUp(e){
  if(activePointer!==e.pointerId)return;
  e.preventDefault();
  if(activeStroke){activeStroke.points.push(point(e));page.strokes.push(activeStroke)}
- activeStroke=null;activePointer=null;draw();queueSave();
+ activeStroke=null;activePointer=null;draw();saveInk();
 }
 function queueSave(){
  clearTimeout(saveTimer);saveTimer=setTimeout(function(){saveInk()},300);
