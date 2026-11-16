@@ -138,6 +138,15 @@
     return {t:o.summary||'(Untitled)',date:ad?o.start.date:fmtDate(start),ad:ad?1:0,st:ad?'':fmtTime(start),en:ad?'':fmtTime(end),n:o.description||'',rep:'none'};
   }
   function range(){const now=new Date();const l=new Date(now.getFullYear()-1,0,1);const h=new Date(now.getFullYear()+3,0,1);return {min:l.toISOString(),max:h.toISOString(),start:l,end:h};}
+ 
+  function applyCalendarCategory(provider,account,c){
+    const category=c.category||'personal';
+    for(const event of S.ev){
+      if(event.syncSource===provider&&event.syncAccount===account&&event.syncCalendar===c.id)event.p=category;
+    }
+    save();
+  }
+
   function merge(provider,account,c,remotes,mapper){const known=new Map(S.ev.filter(e=>e.syncSource===provider&&e.syncAccount===account&&e.syncCalendar===c.id&&e.syncId).map(e=>[String(e.syncId),e]));
     const seen=new Set();let added=0,updated=0;
     for(const o of remotes){if(!o?.id)continue;seen.add(String(o.id));const ext=known.get(String(o.id));if(o.status==='cancelled'){
