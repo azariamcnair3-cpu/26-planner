@@ -1,3 +1,4 @@
+
 /* Personal Planner calendar integrations. No passwords or Google tokens are stored in app backups. */
 (() => {
   'use strict';
@@ -138,7 +139,6 @@
     return {t:o.summary||'(Untitled)',date:ad?o.start.date:fmtDate(start),ad:ad?1:0,st:ad?'':fmtTime(start),en:ad?'':fmtTime(end),n:o.description||'',rep:'none'};
   }
   function range(){const now=new Date();const l=new Date(now.getFullYear()-1,0,1);const h=new Date(now.getFullYear()+3,0,1);return {min:l.toISOString(),max:h.toISOString(),start:l,end:h};}
- 
   function applyCalendarCategory(provider,account,c){
     const category=c.category||'personal';
     for(const event of S.ev){
@@ -146,7 +146,6 @@
     }
     save();
   }
-
   function merge(provider,account,c,remotes,mapper){const known=new Map(S.ev.filter(e=>e.syncSource===provider&&e.syncAccount===account&&e.syncCalendar===c.id&&e.syncId).map(e=>[String(e.syncId),e]));
     const seen=new Set();let added=0,updated=0;
     for(const o of remotes){if(!o?.id)continue;seen.add(String(o.id));const ext=known.get(String(o.id));if(o.status==='cancelled'){
@@ -154,13 +153,13 @@
         continue;}
       const fields=mapper(o);if(!fields.date||fields.date==='NaN-NaN-NaN')continue;
       if(ext){if(ext.syncDirty){if(ext.syncEtag&&o.etag&&ext.syncEtag!==o.etag)ext.syncConflict=true;continue;}
-        Object.assign(ext,fields,{syncEtag:o.etag||'',syncManaged:ext.syncManaged||false,syncConflict:false});updated++;
+        Object.assign(ext,fields,{p:c.category||'personal',syncEtag:o.etag||'',syncManaged:ext.syncManaged||false,syncConflict:false});updated++;
       }else{S.ev.push({...fields,id:uid(),p:c.category||'personal',syncSource:provider,syncAccount:account,syncCalendar:c.id,syncId:o.id,syncEtag:o.etag||'',syncManaged:!!o.managed,syncDirty:false});added++;}
     }
     // Only remove remotely deleted copies when a complete selected-calendar fetch succeeded.
     const rng=range();
     S.ev=S.ev.filter(e=>!(e.syncSource===provider&&e.syncAccount===account&&e.syncCalendar===c.id&&!e.syncDirty&&!seen.has(String(e.syncId))&&e.date>=fmtDate(rng.start)&&e.date<fmtDate(rng.end)));
-    save();return {added,updated};
+    applyCalendarCategory(provider,account,c);return {added,updated};
   }
   async function pullGoogle(){let total=0;const rg=range();for(const c of cfg.googleSources.filter(c=>c.enabled&&sessions.has(c.email))){
       const all=[];let next='';do{const params=new URLSearchParams({timeMin:rg.min,timeMax:rg.max,singleEvents:'true',showDeleted:'true',maxResults:'1000'});if(next)params.set('pageToken',next);
@@ -211,9 +210,9 @@
   document.addEventListener('change',e=>{const t=e.target;
     const iG=t.dataset.gEnable, cG=t.dataset.gCategory, iI=t.dataset.icEnable,cI=t.dataset.icCategory;
     if(iG!==undefined){cfg.googleSources[Number(iG)].enabled=t.checked;save();}
-    if(cG!==undefined){cfg.googleSources[Number(cG)].category=t.value;save();}
+    if(cG!==undefined){const c=cfg.googleSources[Number(cG)];c.category=t.value;applyCalendarCategory('google',c.email,c);render();}
     if(iI!==undefined){cfg.icloudSources[Number(iI)].enabled=t.checked;save();}
-    if(cI!==undefined){cfg.icloudSources[Number(cI)].category=t.value;save();}
+    if(cI!==undefined){const c=cfg.icloudSources[Number(cI)];c.category=t.value;applyCalendarCategory('icloud','icloud',c);render();}
     if(t.id==='g-client'){cfg.clientId=t.value.trim();save();}
     if(t.id==='g-mode'){cfg.googleMode=t.value;sessions.clear();pendingGoogleURL='';save();render();}
     if(t.id==='ic-url'){cfg.icloudUrl=t.value.trim();save();}
