@@ -296,6 +296,39 @@ input[type=color]{cursor:pointer}
  .ink-status{display:none}
 }
 
+
+/* Ink notebook library and page template */
+.ink-hub{position:relative;padding:24px 24px 88px!important;min-height:450px}
+.ink-hub-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ink-hub-head h1{margin:0 0 5px;font-size:30px;letter-spacing:-.025em}
+.ink-hub-head p{font-size:13px;color:var(--mut);margin:0}
+.ink-folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin:20px 0}
+.ink-folder-tile{min-height:152px;padding:14px;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:16px;display:flex;flex-direction:column;gap:10px}
+.ink-folder-tile>button[data-ink=open-folder]{text-align:left;background:transparent;border:none;padding:0;color:inherit;cursor:pointer;display:grid;gap:9px;flex:1}
+.ink-folder-tile strong{font-weight:650;font-size:16px}
+.ink-folder-tile small{font-size:12px;color:var(--mut)}
+.ink-folder-mark{width:44px;height:36px;display:grid;place-items:center;border-radius:8px;background:var(--folder-tint,#dcc8d4);font-size:23px;color:#3b3443}
+.ink-folder-tile .btn{font-size:12px;padding:5px 9px;align-self:flex-end}
+.ink-hub-caption{font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--mut);margin-top:18px}
+.ink-note-list{display:grid;margin:12px 0 0;border-top:1px solid var(--line)}
+.ink-note-row{padding:12px 4px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--tx);text-align:left;display:flex;gap:13px;align-items:center;width:100%;cursor:pointer}
+.ink-note-row:hover{background:color-mix(in srgb,var(--card) 85%,transparent)}
+.ink-note-paper{width:35px;height:44px;background:repeating-linear-gradient(to bottom,#fff 0px,#fff 11px,#f5d6d8 12px);border:1px solid #eed8df;flex:none;border-radius:3px}
+.ink-note-row strong{display:block;font-size:15px;font-weight:600}
+.ink-note-row small{font-size:12px;color:var(--mut)}
+.ink-hub-fab,.ink-sheet-fab{border:0!important;border-radius:50%!important;width:62px;height:62px;min-height:62px!important;display:grid;place-items:center;color:white!important;background:var(--app-accent,#7564c2)!important;box-shadow:0 9px 24px rgba(26,23,48,.23);font-size:35px!important;font-weight:350;cursor:pointer;padding:0!important}
+.ink-hub-fab{position:absolute;bottom:22px;right:24px}
+.ink-sheet-fab{position:fixed;right:calc(24px + env(safe-area-inset-right));bottom:calc(70px + env(safe-area-inset-bottom));z-index:1010}
+.ink-sheet-folder{font-size:13px;font-weight:650;color:#6a5b86;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ink-sheet-select{max-width:190px;padding:7px 9px;border:1px solid #d7d4df;background:white;border-radius:9px;color:#26262e}
+#ink-overlay .ink-page{position:relative}
+#ink-overlay .ink-scroll{padding-right:40px;padding-bottom:100px}
+.ink-page-tabs{position:absolute;right:-29px;top:90px;display:flex;flex-direction:column;gap:2px;z-index:5}
+.ink-page-tab{border:1px solid rgba(58,47,68,.14)!important;background:var(--tab-color,#dcb7ca)!important;color:#2e2630!important;width:29px;height:46px;min-height:46px!important;padding:0!important;border-radius:0 9px 9px 0!important;font-size:11px!important;font-weight:700!important}
+.ink-page-tab.active{width:33px;box-shadow:2px 2px 7px rgba(39,27,47,.24)}
+.ink-typed-notes{margin-top:20px}.ink-typed-notes summary{cursor:pointer;font-size:13px;color:var(--mut)}
+@media(max-width:700px){.ink-hub{padding:17px 14px 83px!important}.ink-folder-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ink-folder-tile{min-height:133px}.ink-hub-fab,.ink-sheet-fab{height:55px;width:55px;min-height:55px!important}.ink-page-tabs{right:-25px}.ink-page-tab{width:25px;height:38px;min-height:38px!important}}
+
 </style></head><body>
 <nav class="side" id="side" aria-label="Sections"></nav>
 <main id="m"></main><div id="pr"></div><div id="ov"></div>
@@ -754,8 +787,8 @@ function genId(){return Date.now().toString(36)+"-"+Math.random().toString(36).s
 function noteClone(x){return JSON.parse(JSON.stringify(x))}
 function openDatabase(){return new Promise(function(resolve,reject){
  if(!window.indexedDB){reject(new Error("Handwriting storage is not available"));return}
- var req=indexedDB.open(DB_NAME,1);
- req.onupgradeneeded=function(){if(!req.result.objectStoreNames.contains(storeName))req.result.createObjectStore(storeName,{keyPath:"id"})};
+ var req=indexedDB.open(DB_NAME,2);
+ req.onupgradeneeded=function(){if(!req.result.objectStoreNames.contains(storeName))req.result.createObjectStore(storeName,{keyPath:"id"});if(!req.result.objectStoreNames.contains("folders"))req.result.createObjectStore("folders",{keyPath:"id"})};
  req.onsuccess=function(){db=req.result;resolve(db)};
  req.onerror=function(){reject(req.error||new Error("Cannot open note storage"))};
  })}
@@ -929,7 +962,7 @@ function openEditor(doc){
  c.addEventListener("pointermove",onPointerMove);
  c.addEventListener("pointerup",onPointerUp);
  c.addEventListener("pointercancel",onPointerUp);
- draw();document.getElementById("ink-title").focus();
+ draw();
 }
 function newNote(d,eventId,eventName){
  var x={id:genId(),title:eventName?eventName+" notes":"Untitled page",date:d||todayDate(),eventId:eventId||"",paper:"lined",strokes:[],created:Date.now(),updated:Date.now()};
@@ -1010,7 +1043,119 @@ function enhanceEventSheet(){
 if(window.MutationObserver){
  var observer=new MutationObserver(function(){enhanceEventSheet()});observer.observe(document.getElementById("ov")||document.body,{childList:true,subtree:true});
 }
-openDatabase().then(function(){return refreshPages()}).then(function(){render()}).catch(function(err){
+
+/* ink-folders-v2: current handwriting pages remain in the original IndexedDB store */
+var inkFolders=[],inkActiveFolder="folder-default";
+var inkDefaultFolder="folder-default",inkUnfiledFolder="folder-unfiled";
+var inkTabColors=["#efaaa2","#e98097","#cf79b3","#aa84c5","#888bc8","#6a98cb","#48b5cb","#51bfc0","#8dbeb9"];
+function inkFolderID(n){return n&&n.folderId||inkUnfiledFolder}
+function inkPagesIn(id){return pages.filter(function(n){return inkFolderID(n)===id}).sort(function(a,b){return (b.updated||0)-(a.updated||0)})}
+function inkFolderName(id){if(id===inkUnfiledFolder)return "Unfiled";return inkFolders.find(function(f){return f.id===id})?.title||"My Notebook"}
+function inkFolderTint(id){if(id===inkUnfiledFolder)return "#d8d5de";return inkFolders.find(function(f){return f.id===id})?.color||inkTabColors[0]}
+function inkGetFolders(){return new Promise(function(resolve,reject){var r=db.transaction("folders","readonly").objectStore("folders").getAll();r.onsuccess=function(){resolve(r.result||[])};r.onerror=function(){reject(r.error)}})}
+function inkPutFolder(f){return new Promise(function(resolve,reject){var t=db.transaction("folders","readwrite");t.objectStore("folders").put(f);t.oncomplete=function(){resolve()};t.onerror=function(){reject(t.error)}})}
+async function inkLoadFolders(){
+ inkFolders=await inkGetFolders();
+ if(!inkFolders.some(function(f){return f.id===inkDefaultFolder})){
+  await inkPutFolder({id:inkDefaultFolder,title:"My Notebook",color:inkTabColors[0],created:Date.now()});inkFolders=await inkGetFolders();
+ }
+ inkFolders.sort(function(a,b){return (a.created||0)-(b.created||0)});
+}
+function inkDisplayTitle(n){return !n||n==="Untitled page"?"New note":n}
+decorationsForNotes=function(){
+ if(V!=="notes"||document.getElementById("ink-notebook"))return;
+ var original=document.querySelector("#m .card");if(!original)return;
+ var library=document.createElement("section");library.id="ink-notebook";library.className="card ink-hub";
+ var unfiledCount=inkPagesIn(inkUnfiledFolder).length;
+ var all=inkFolders.concat(unfiledCount?[{id:inkUnfiledFolder,title:"Unfiled",color:"#d8d5de"}]:[]);
+ var folderHTML=all.map(function(f){var count=inkPagesIn(f.id).length;
+  return '<div class="ink-folder-tile" style="--folder-tint:'+h(f.color)+'"><button type="button" data-ink="open-folder" data-id="'+h(f.id)+'"><span class="ink-folder-mark">▤</span><strong>'+h(f.title)+'</strong><small>'+count+' '+(count===1?'page':'pages')+'</small></button>'+(f.id===inkUnfiledFolder?'':'<button type="button" class="btn" data-ink="rename-folder" data-id="'+h(f.id)+'">Rename</button>')+'</div>'
+ }).join("");
+ var recentHTML=pages.slice(0,10).map(function(n){
+  return '<button type="button" class="ink-note-row" data-ink="open" data-id="'+h(n.id)+'"><span class="ink-note-paper"></span><span style="flex:1"><strong>'+h(inkDisplayTitle(n.title))+'</strong><small>'+h(inkFolderName(inkFolderID(n)))+' · '+h(n.date||"")+'</small></span><span aria-hidden="true">›</span></button>'
+ }).join("");
+ library.innerHTML='<div class="ink-hub-head"><div><h1>Notes</h1><p>Choose a folder to open your notebook.</p></div><div class="ink-actions"><button class="btn" data-ink="create-folder">＋ New Folder</button><button class="btn" data-ink="export">Export notebooks</button><label class="btn">Import backup<input id="ink-import" type="file" accept=".json,application/json" hidden></label></div></div><div class="ink-hub-caption">Folders</div><div class="ink-folder-grid">'+folderHTML+'</div><div class="ink-hub-caption">Recent notes</div><div class="ink-note-list">'+(recentHTML||'<p class="sub">Your handwritten pages will appear here.</p>')+'</div><button type="button" class="ink-hub-fab" data-ink="new-sheet" aria-label="New note" title="New note">＋</button>';
+ original.before(library);
+ var details=document.createElement("details");details.className="ink-typed-notes";details.innerHTML="<summary>Typed notes</summary>";original.before(details);details.appendChild(original);
+};
+var inkOldPaperDraw=paperDraw;
+paperDraw=function(ctx,kind){
+ if(kind!=="notebook")return inkOldPaperDraw(ctx,kind);
+ ctx.fillStyle="#fff";ctx.fillRect(0,0,1000,1400);
+ ctx.fillStyle="#fff0f0";ctx.fillRect(33,57,585,52);ctx.fillRect(637,57,329,52);
+ ctx.fillStyle="#535059";ctx.font="bold 16px -apple-system,Arial";ctx.fillText("TITLE",50,90);ctx.fillText("DATE",654,90);
+ ctx.font="25px -apple-system,Arial";ctx.fillStyle="#303037";
+ if(page&&page.title&&page.title!=="Untitled page")ctx.fillText(page.title,50,161,550);
+ if(page&&page.date)ctx.fillText(page.date,655,161,290);
+ ctx.font="20px -apple-system,Arial";var wd=["M","T","W","T","F","S","S"];wd.forEach(function(v,i){ctx.fillText(v,649+i*44,208)});
+ ctx.strokeStyle="#99969a";ctx.lineWidth=1.2;ctx.setLineDash([1.5,5.2]);
+ for(var y=265;y<1385;y+=56){ctx.beginPath();ctx.moveTo(30,y);ctx.lineTo(952,y);ctx.stroke()}
+ ctx.setLineDash([]);
+};
+var inkOldEditorHTML=editorHTML;
+editorHTML=function(){
+ var html=inkOldEditorHTML();
+ var fid=inkFolderID(page),sheetList=inkPagesIn(fid);
+ if(!sheetList.some(function(p){return p.id===page.id}))sheetList.unshift(page);
+ html=html.replace('<button data-ink="close">‹ Back</button>','<button data-ink="close">‹ Notes</button><span class="ink-sheet-folder">▤ '+h(inkFolderName(fid))+'</span>');
+ html=html.replace('<option value="lined">Lined</option>','<option value="notebook">Notebook template</option><option value="lined">Lined</option>');
+ var opts=sheetList.slice(0,150).map(function(n){return '<option value="'+h(n.id)+'"'+(n.id===page.id?' selected':'')+'>'+h(inkDisplayTitle(n.title).slice(0,32))+'</option>'}).join("");
+ html=html.replace('<div class="ink-toolbar"><button data-ink="undo">','<div class="ink-toolbar"><label style="font-size:13px">Pages <select class="ink-sheet-select" id="ink-switch-page" aria-label="Select notebook page">'+opts+'</select></label><button data-ink="undo">');
+ var tabs=sheetList.slice(0,9).map(function(n,i){return '<button type="button" data-ink="switch-sheet" data-id="'+h(n.id)+'" class="ink-page-tab'+(n.id===page.id?' active':'')+'" style="--tab-color:'+inkTabColors[i%inkTabColors.length]+'" title="'+h(inkDisplayTitle(n.title))+'">'+String(i+1).padStart(2,"0")+'</button>'}).join("");
+ html=html.replace('<canvas id="ink-canvas" width="1000" height="1400" aria-label="Handwriting canvas"></canvas></div>','<canvas id="ink-canvas" width="1000" height="1400" aria-label="Handwriting canvas"></canvas><div class="ink-page-tabs" aria-label="Notebook page tabs">'+tabs+'</div></div>');
+ html=html.replace('<div class="ink-tools-bottom">','<button type="button" class="ink-sheet-fab" data-ink="new-sheet" title="New page" aria-label="New notebook page">＋</button><div class="ink-tools-bottom">');
+ return html;
+};
+var inkOldOpenEditor=openEditor;
+openEditor=function(documentPage){inkActiveFolder=inkFolderID(documentPage);inkOldOpenEditor(documentPage)};
+newNote=function(d,eventId,eventName,folderId){
+ var now=Date.now(),x={id:genId(),title:eventName?eventName+" notes":"Untitled page",date:d||todayDate(),eventId:eventId||"",folderId:folderId||(V==="notes"?inkActiveFolder:inkDefaultFolder),paper:"notebook",strokes:[],created:now,updated:now};
+ openEditor(x);saveInk();
+};
+exportNotes=async function(){
+ try{await refreshPages();await inkLoadFolders();download(JSON.stringify({kind:"Personal Planner Ink Backup",version:2,date:new Date().toISOString(),pages:pages,folders:inkFolders},null,2),"application/json","planner-notebooks-backup.json");toast("Notebook backup exported")}
+ catch(e){console.warn(e);toast("Could not export notes")}
+};
+importNotes=async function(file){
+ if(!file||file.size>25*1024*1024)return toast("Select a notebook backup smaller than 25 MB");
+ try{
+ var data=JSON.parse(await file.text());if(data.kind!=="Personal Planner Ink Backup"||!Array.isArray(data.pages))throw Error("Invalid ink backup");
+ var mapping={},count=0;
+ for(var i=0;i<(data.folders||[]).length;i++){var f=data.folders[i];if(!f||!f.id||!f.title)continue;
+  var fid="folder-"+genId();mapping[f.id]=fid;
+  await inkPutFolder({id:fid,title:String(f.title).slice(0,50),color:/^#[0-9a-f]{6}$/i.test(f.color||"")?f.color:inkTabColors[i%inkTabColors.length],created:Date.now()+i});
+ }
+ for(var j=0;j<data.pages.length;j++){var n=data.pages[j];if(!n||!Array.isArray(n.strokes)||n.strokes.length>20000)continue;
+  await putPage({id:genId(),title:String(n.title||"Imported page").slice(0,90),date:/^\d{4}-\d{2}-\d{2}$/.test(n.date||"")?n.date:todayDate(),eventId:"",folderId:mapping[n.folderId]||inkUnfiledFolder,paper:["notebook","lined","plain","grid","dotted"].includes(n.paper)?n.paper:"lined",strokes:n.strokes,created:Date.now(),updated:Date.now()});count++;
+ }
+ await refreshPages();await inkLoadFolders();render();toast("Imported "+count+" notes");
+ }catch(e){console.warn(e);toast("Could not import notebook backup")}
+};
+var inkOldDoAction=doAction;
+doAction=async function(el){
+ var action=el.dataset.ink,id=el.dataset.id;
+ if(action==="create-folder"){if(!db)return toast("Storage unavailable");var title=prompt("Name your new folder:","New Folder");if(title===null)return;
+  title=title.trim().slice(0,50);if(!title)return toast("Please name your folder");
+  var record={id:"folder-"+genId(),title:title,color:inkTabColors[inkFolders.length%inkTabColors.length],created:Date.now()};
+  await inkPutFolder(record);await inkLoadFolders();inkActiveFolder=record.id;newNote(todayDate(),"","",record.id);return;
+ }
+ if(action==="rename-folder"){
+  var f=inkFolders.find(function(x){return x.id===id});if(!f)return;
+  var next=prompt("Rename folder:",f.title);if(next===null)return;next=next.trim().slice(0,50);if(!next)return;
+  f.title=next;await inkPutFolder(f);await inkLoadFolders();render();return;
+ }
+ if(action==="open-folder"){inkActiveFolder=id;var p=inkPagesIn(id)[0];if(p)openEditor(p);else newNote(todayDate(),"","",id);return}
+ if(action==="new-sheet"){var folder=page?inkFolderID(page):inkActiveFolder;if(page)await saveInk();newNote(todayDate(),"","",folder);return}
+ if(action==="switch-sheet"){var p=pages.find(function(n){return n.id===id});if(!p||p.id===page?.id)return;if(page)await saveInk();openEditor(p);return}
+ if(action==="open"){var open=pages.find(function(n){return n.id===id});if(open)inkActiveFolder=inkFolderID(open)}
+ return inkOldDoAction(el);
+};
+document.addEventListener("change",function(e){if(e.target.id!=="ink-switch-page")return;var p=pages.find(function(n){return n.id===e.target.value});if(!p)return;
+ (async function(){if(page)await saveInk();openEditor(p)})().catch(function(err){console.warn(err);toast("Could not open this page")});
+},true);
+document.addEventListener("input",function(e){if(page?.paper==="notebook"&&(e.target.id==="ink-title"||e.target.id==="ink-date"))draw()},true);
+
+openDatabase().then(function(){return refreshPages()}).then(function(){return inkLoadFolders()}).then(function(){render()}).catch(function(err){
  console.warn("Handwriting storage unavailable",err);
  render();toast("Drawing storage unavailable on this device; check browser storage settings");
 });
