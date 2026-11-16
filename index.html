@@ -329,6 +329,32 @@ input[type=color]{cursor:pointer}
 .ink-typed-notes{margin-top:20px}.ink-typed-notes summary{cursor:pointer;font-size:13px;color:var(--mut)}
 @media(max-width:700px){.ink-hub{padding:17px 14px 83px!important}.ink-folder-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ink-folder-tile{min-height:133px}.ink-hub-fab,.ink-sheet-fab{height:55px;width:55px;min-height:55px!important}.ink-page-tabs{right:-25px}.ink-page-tab{width:25px;height:38px;min-height:38px!important}}
 
+
+/* Categories first: compact, individually editable School / Professional / Personal lists */
+.ui-task-groups-intro{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin:22px 2px 11px}
+.ui-task-groups-intro h2{font-size:21px;font-weight:700;margin:0;letter-spacing:-.025em}
+.ui-task-groups-intro span{font-size:13px;color:var(--mut)}
+.ui-task-category-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.ui-task-category-grid .ui-task-group{padding:0;min-height:186px;overflow:hidden;border-radius:21px}
+.ui-task-group-head{display:flex;align-items:center;gap:10px;padding:16px 14px 13px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--task-group-color) 7%,var(--card))}
+.ui-task-group-accent{flex:none;width:6px;height:42px;border-radius:8px;background:var(--task-group-color)}
+.ui-task-group-heading{flex:1;min-width:0}
+.ui-task-group-heading h2{margin:0;font-size:18px;line-height:1.2;font-weight:700;letter-spacing:-.025em;overflow-wrap:anywhere}
+.ui-task-group-heading p{margin:4px 0 0;font-size:12px;color:var(--mut)}
+.ui-task-group-add{flex:none;font-size:12px!important;min-height:32px!important;padding:5px 8px!important;white-space:nowrap}
+.ui-task-group-items{padding:0 14px 10px}
+.ui-task-group-row{display:flex;align-items:flex-start;gap:9px;padding:13px 0;border-bottom:1px solid var(--line)}
+.ui-task-group-row:last-child{border-bottom:0}
+.ui-task-group-row>input[type=checkbox]{flex:none;width:21px;height:21px;margin:1px 0 0;accent-color:var(--task-group-color)}
+.ui-task-group-copy{flex:1;min-width:0;font-size:14px;line-height:1.4}
+.ui-task-group-name{display:block;overflow-wrap:anywhere}
+.ui-task-group-copy small{display:block;color:var(--mut);font-size:12px;margin-top:5px}
+.ui-task-group-copy.done .ui-task-group-name{text-decoration:line-through;color:var(--mut);opacity:.72}
+.ui-task-group-edit{width:30px!important;min-width:30px!important;min-height:30px!important;padding:4px!important;font-size:13px!important;flex:none;margin:-3px 0 0}
+.ui-task-group-empty{color:var(--mut);font-size:13px;margin:17px 0 19px}
+@media(max-width:820px){.ui-task-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.ui-task-category-grid{grid-template-columns:1fr}}
+
 </style></head><body>
 <nav class="side" id="side" aria-label="Sections"></nav>
 <main id="m"></main><div id="pr"></div><div id="ov"></div>
@@ -613,6 +639,31 @@ if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventL
     const filters=[['all','All'],['today','Today'],['upcoming','Upcoming'],['school','School'],['professional','Professional'],['personal','Personal'],['completed','Completed']];
     return `<div class="ui-task-page"><div class="ui-page-head"><h1>To Do</h1><div class="sub">Your tasks save automatically as you check them off.</div></div><section class="ui-panel"><div class="ui-task-filter">${filters.map(([k,l])=>`<button class="${taskView===k?'active':''}" data-ui-action="task-filter" data-key="${k}">${l}</button>`).join('')}</div><div class="ui-task-form"><input id="tt" type="text" placeholder="Add a task…" aria-label="Task"><select id="tp" aria-label="Category">${P.map(p=>`<option value="${p.id}">${p.e} ${safe(p.n)}</option>`).join('')}</select><input id="td" type="date" aria-label="Due date"><button class="btn pri" data-a="addtk">Add</button></div></section><section class="ui-panel" style="margin-top:15px"><div class="ui-panel-head"><h2>${safe((filters.find(f=>f[0]===taskView)||['','All'])[1])} Tasks</h2><span class="sub">${tasks.length} tasks</span></div>${tasks.length?tasks.map(t=>`<div class="ui-task-item"><input type="checkbox" ${t.x?'checked':''} data-a="tick" data-id="${safe(t.id)}" aria-label="Complete task"><div class="text ${t.x?'done':''}">${safe(t.t)}</div><span class="date">${t.d?safe(t.d):''}</span>${taskTag(t.p)}<button class="btn sq ui-icon-edit" data-a="edittk" data-id="${safe(t.id)}" aria-label="Edit task">✎</button></div>`).join(''):'<p class="ui-empty">No tasks in this view.</p>'}</section></div>`;
   }
+
+  // task-category-grid-v1: split mixed To Do list into School, Professional and Personal.
+  const originalModernTasks=modernTasks;
+  modernTasks=function(){
+    const base=originalModernTasks();
+    if(['school','professional','personal'].includes(taskView))return base;
+    const anchor='<section class="ui-panel" style="margin-top:15px">';
+    const cut=base.indexOf(anchor);
+    if(cut<0)return base;
+    const day=ymd(new Date());
+    let items=S.tk.slice().sort((a,b)=>a.x-b.x||(a.d||'9999').localeCompare(b.d||'9999'));
+    if(taskView==='today')items=items.filter(t=>!t.x&&t.d===day);
+    else if(taskView==='upcoming')items=items.filter(t=>!t.x&&t.d&&t.d>day);
+    else if(taskView==='completed')items=items.filter(t=>!!t.x);
+    const row=t=>`<div class="ui-task-group-row"><input type="checkbox" ${t.x?'checked':''} data-a="tick" data-id="${safe(t.id)}" aria-label="Complete ${safe(t.t)}"><div class="ui-task-group-copy ${t.x?'done':''}"><span class="ui-task-group-name">${safe(t.t)}</span>${t.d?`<small>Due ${safe(t.d)}</small>`:''}</div><button class="btn sq ui-task-group-edit" data-a="edittk" data-id="${safe(t.id)}" aria-label="Edit ${safe(t.t)}">✎</button></div>`;
+    const group=p=>{
+      const list=items.filter(t=>t.p===p.id),pending=list.filter(t=>!t.x).length;
+      const count=taskView==='completed'?`${list.length} completed`:pending===0?(list.length?'All complete':'No open tasks'):`${pending} to do${list.length>pending?` · ${list.length-pending} done`:''}`;
+      return `<section class="ui-panel ui-task-group" style="--task-group-color:${safe(p.c)}"><header class="ui-task-group-head"><span class="ui-task-group-accent" aria-hidden="true"></span><div class="ui-task-group-heading"><h2>${safe(p.n)}</h2><p>${count}</p></div><button class="btn ui-task-group-add" data-ui-action="quick-task" data-category="${safe(p.id)}">+ Task</button></header><div class="ui-task-group-items">${list.length?list.map(row).join(''):`<p class="ui-task-group-empty">No tasks here yet.</p>`}</div></section>`;
+    };
+    const name=taskView==='all'?'My Lists':taskView==='today'?'Today':taskView==='upcoming'?'Upcoming':'Completed';
+    const grouped=`<div class="ui-task-groups-intro"><h2>${name}</h2><span>${items.length} ${items.length===1?'task':'tasks'}</span></div><div class="ui-task-category-grid">${P.filter(p=>['school','professional','personal'].includes(p.id)).map(group).join('')}</div></div>`;
+    return base.slice(0,cut)+grouped;
+  };
+
   function modernSection(k){const p=pp(k),dates=listUpcoming(k,75,24),events=dates.map(({day,items})=>`<div class="grp">${fmtDay(day).toUpperCase()} ${MN[day.getMonth()].slice(0,3)} ${day.getDate()}</div>`+items.map(e=>`<button class="up" data-a="edit" data-id="${safe(e.id)}" style="--c:${p.c}"><i></i><div><b>${safe(e.t)}</b><span>${e.ad?'All-day':f12(e.st)+(e.en?' – '+f12(e.en):'')}</span></div></button>`).join('')).join('');
     const ts=S.tk.filter(t=>t.p===k).sort((a,b)=>a.x-b.x||(a.d||'9999').localeCompare(b.d||'9999'));
     return `<div class="ui-page-head"><h1 class="ui-category-title">${safe(p.n)}</h1><div class="sub">Your ${safe(p.n.toLowerCase())} events and tasks, together.</div></div><div class="ui-page-grid"><section class="ui-panel ui-category-col"><div class="ui-category-head"><h2>Upcoming Calendar</h2><button class="btn" data-a="newcat" data-k="${k}">+ Event</button></div>${events||'<p class="ui-empty">No upcoming events in this category.</p>'}</section><section class="ui-panel"><div class="ui-category-head"><h2>To Do</h2><button class="btn" data-ui-action="quick-task" data-category="${k}">+ Task</button></div>${ts.length?ts.map(t=>`<div class="ui-task-item"><input type="checkbox" data-a="tick" data-id="${safe(t.id)}" ${t.x?'checked':''}><div class="text ${t.x?'done':''}">${safe(t.t)}${t.d?`<div class="date">Due ${safe(t.d)}</div>`:''}</div><button class="btn sq ui-icon-edit" data-a="edittk" data-id="${safe(t.id)}">✎</button></div>`).join(''):'<p class="ui-empty">No tasks here yet.</p>'}</section></div>`;
